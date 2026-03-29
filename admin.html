@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dash 後台管理系統 · 韓迷做給韓迷的選物平台">
+<meta name="robots" content="noindex, nofollow">
+<title>Dash — 後台</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #0F4C81; --blue-light: #1a6bb5; --text: #111; --muted: #888; --border: #e8e8e8; --bg: #f5f7fa; --red: #e74c3c; --green: #2ecc71; --orange: #f39c12; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 220px; background: var(--blue); display: flex; flex-direction: column; padding: 28px 0; z-index: 50; }
+  .sidebar-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: 0.08em; color: white; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .sidebar-logo span { opacity: 0.5; }
+  .sidebar-nav { padding: 16px 0; flex: 1; overflow-y: auto; }
+  .nav-section { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 16px 24px 6px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 11px 24px; color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.2s; font-size: 14px; font-weight: 500; border-left: 3px solid transparent; }
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+  .nav-item.active { background: rgba(255,255,255,0.12); color: white; border-left-color: white; }
+  .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .nav-badge { margin-left: auto; background: var(--red); color: white; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+
+  /* ── MAIN ── */
+  .main { margin-left: 220px; padding: 40px; min-height: 100vh; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .page-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 36px; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .page-title span { color: var(--blue); }
+  .page-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+
+  /* ── CARD ── */
+  .card { background: white; border-radius: 10px; padding: 28px 32px; margin-bottom: 24px; border: 1px solid var(--border); }
+  .card-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.04em; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+
+  /* ── FORM ── */
+  .form-row { margin-bottom: 18px; }
+  .form-row label { display: block; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+  .form-row input, .form-row textarea, .form-row select { width: 100%; border: 1.5px solid var(--border); border-radius: 6px; padding: 11px 14px; font-family: 'Noto Sans TC', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; background: white; color: var(--text); }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { border-color: var(--blue); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* ── COVER ── */
+  .cover-upload { width: 100%; aspect-ratio: 16/5; border: 2px dashed var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s; position: relative; overflow: hidden; background: var(--bg); }
+  .cover-upload:hover { border-color: var(--blue); }
+  .cover-upload input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .cover-upload img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cover-hint { font-size: 13px; color: var(--muted); text-align: center; pointer-events: none; z-index: 1; }
+  .cover-clear { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; z-index: 2; display: none; }
+
+  /* ── RICH EDITOR ── */
+  .editor-toolbar { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; padding: 8px 10px; background: var(--bg); border: 1.5px solid var(--border); border-bottom: none; border-radius: 6px 6px 0 0; }
+  .tool-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border: none; background: transparent; border-radius: 4px; cursor: pointer; font-size: 13px; color: var(--text); transition: background 0.15s; font-family: inherit; }
+  .tool-btn:hover { background: white; }
+  .tool-img { color: var(--blue); font-weight: 500; }
+  .tool-divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+  .rich-editor { width: 100%; min-height: 220px; border: 1.5px solid var(--border); border-radius: 0 0 6px 6px; padding: 14px 16px; font-family: 'Noto Sans TC', sans-serif; font-size: 14px; line-height: 1.9; outline: none; color: var(--text); background: white; overflow-y: auto; }
+  .rich-editor:focus { border-color: var(--blue); }
+  .rich-editor[data-placeholder]:empty::before { content: attr(data-placeholder); color: #bbb; pointer-events: none; }
+  .rich-editor img { max-width: 100%; border-radius: 6px; margin: 8px 0; display: block; }
+  .word-count { font-size: 11px; color: var(--muted); text-align: right; margin-top: 6px; }
+
+  /* ── TAGS ── */
+  .tag-input-wrap { display: flex; gap: 8px; }
+  .tag-input-wrap input { flex: 1; }
+  .tags-display { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-pill { display: inline-flex; align-items: center; gap: 5px; background: #f0f5ff; color: var(--blue); border: 1px solid #c8d8f0; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 500; }
+  .tag-pill button { background: none; border: none; cursor: pointer; color: var(--blue); font-size: 14px; line-height: 1; padding: 0; }
+
+  /* ── BTNS ── */
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 6px; border: none; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+  .btn-draft { background: var(--orange); color: white; }
+  .btn-draft:hover { opacity: 0.88; }
+  .btn-danger { background: var(--red); color: white; font-size: 12px; padding: 7px 14px; }
+  .btn-danger:hover { opacity: 0.85; }
+  .btn-secondary { background: var(--border); color: var(--text); }
+  .btn-secondary:hover { background: #d5d5d5; }
+  .btn-sm { font-size: 12px; padding: 7px 14px; }
+  .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-outline:hover { background: #f0f5ff; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ── STATS ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card { background: white; border-radius: 10px; padding: 22px 24px; border: 1px solid var(--border); }
+  .stat-number { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 44px; color: var(--blue); line-height: 1; margin-bottom: 5px; }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ── SEARCH ── */
+  .search-bar { position: relative; margin-bottom: 20px; }
+  .search-bar input { width: 100%; padding: 11px 14px 11px 40px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; background: white; }
+  .search-bar input:focus { border-color: var(--blue); }
+  .search-bar svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); }
+
+  /* ── LIST ITEMS ── */
+  .list-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 10px; transition: border-color 0.2s; }
+  .list-item.pinned { border-color: var(--orange); background: #fffdf5; }
+  .list-item.dragging { opacity: 0.4; }
+  .list-item.drag-over { border-color: var(--blue); background: #f0f5ff; }
+  .drag-handle { cursor: grab; color: var(--muted); flex-shrink: 0; }
+  .drag-handle:active { cursor: grabbing; }
+  .drag-handle svg { width: 16px; height: 16px; }
+  .list-item-info { flex: 1; min-width: 0; }
+  .list-item-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .list-item-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: white; background: var(--blue); padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+  .tag-draft { background: var(--orange); }
+  .tag-pin { background: var(--orange); }
+  .tag-custom { background: #6c7ae0; }
+  .meta-text { font-size: 11px; color: var(--muted); }
+  .list-actions { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+
+  /* ── COMMENTS ── */
+  .comment-item { border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
+  .comment-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+  .comment-article { font-size: 11px; color: var(--blue); margin-bottom: 4px; }
+  .comment-text { font-size: 14px; line-height: 1.7; color: #333; margin-bottom: 10px; }
+  .reply-form { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .reply-form textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 6px; padding: 10px 14px; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; resize: none; height: 80px; outline: none; }
+  .reply-form textarea:focus { border-color: var(--blue); }
+  .reply-box { background: #f0f5ff; border-radius: 6px; padding: 12px 16px; margin-top: 10px; font-size: 13px; line-height: 1.7; color: var(--blue); }
+  .reply-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); font-weight: 500; margin-bottom: 4px; }
+
+  /* ── EMAIL ── */
+  .email-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .email-item:last-child { border-bottom: none; }
+
+  /* ── PREVIEW MODAL ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: 12px; width: 90%; max-width: 720px; max-height: 85vh; overflow-y: auto; padding: 40px; position: relative; }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: var(--border); border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+  .preview-platform { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: white; background: var(--blue); padding: 3px 10px; border-radius: 20px; font-weight: 500; display: inline-block; margin-bottom: 12px; }
+  .preview-date { font-size: 12px; color: var(--muted); margin-left: 8px; }
+  .preview-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 36px; line-height: 1.1; margin-bottom: 14px; color: var(--text); }
+  .preview-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .preview-cover { width: 100%; aspect-ratio: 16/9; background: #f0f4f8; border-radius: 8px; margin-bottom: 24px; overflow: hidden; }
+  .preview-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .preview-body { font-size: 15px; line-height: 1.9; color: #333; margin-bottom: 32px; }
+  .preview-body img { max-width: 100%; border-radius: 6px; margin: 12px 0; }
+  .preview-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+
+  /* ── TOAST ── */
+  #toast { position: fixed; bottom: 32px; right: 32px; color: white; padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; z-index: 999; background: var(--green); }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.error { background: var(--red); }
+
+  .empty { text-align: center; padding: 48px; color: var(--muted); font-size: 14px; }
+
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .sidebar { width: 56px; }
+    .sidebar-logo, .nav-item span, .nav-section, .nav-badge { display: none; }
+    .main { margin-left: 56px; padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">DA<span>SH</span></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">主要</div>
+    <div class="nav-item active" onclick="switchPage(this,'dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>總覽</span>
+    </div>
+    <div class="nav-section">文章</div>
+    <div class="nav-item" onclick="switchPage(this,'new-article')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>新增文章</span>
+    </div>
+    <div class="nav-item" onclick="switchPage(this,'articles')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>所有文章</span>
+    </div>
+    <div class="nav-item" onclick="switchPage(this,'drafts')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <span>草稿</span>
+      <span class="nav-badge" id="draft-badge" style="display:none"></span>
+    </div>
+    <div class="nav-section">互動</div>
+    <div class="nav-item" onclick="switchPage(this,'comments')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>留言管理</span>
+      <span class="nav-badge" id="comment-badge" style="display:none"></span>
+    </div>
+    <div class="nav-item" onclick="switchPage(this,'emails')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span>Email 名單</span>
+    </div>
+    <div class="nav-section">互動</div>
+    <div class="nav-item" onclick="switchPage(this,'wishes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>許願清單</span>
+      <span class="nav-badge" id="wish-badge" style="display:none"></span>
+    </div>
+    <div class="nav-section">頁面</div>
+    <div class="nav-item" onclick="switchPage(this,'about')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>關於頁面</span>
+    </div>
+    <div class="nav-section">資料</div>
+    <div class="nav-item" onclick="switchPage(this,'backup')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+      <span>備份匯入</span>
+    </div>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-title">總覽 <span>Dashboard</span></div>
+    <div class="page-sub">Dash 後台管理系統 · 韓迷做給韓迷的選物平台</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number" id="s-articles">0</div><div class="stat-label">已發布</div></div>
+      <div class="stat-card"><div class="stat-number" id="s-drafts">0</div><div class="stat-label">草稿</div></div>
+      <div class="stat-card"><div class="stat-number" id="s-comments">0</div><div class="stat-label">則留言</div></div>
+      <div class="stat-card"><div class="stat-number" id="s-emails">0</div><div class="stat-label">Email 訂閱</div></div>
+    </div>
+    <div class="card"><div class="card-title">最新文章</div><div id="dash-recent"></div></div>
+    <div class="card"><div class="card-title">最新留言</div><div id="dash-comments"></div></div>
+  </div>
+
+  <!-- NEW / EDIT ARTICLE -->
+  <div class="page" id="page-new-article">
+    <div class="page-title" id="form-page-title">新增 <span>文章</span></div>
+    <div class="page-sub">填寫完成後選擇「發布」或「存為草稿」。</div>
+    <input type="hidden" id="edit-id">
+
+    <div class="card">
+      <div class="card-title">封面圖片</div>
+      <div class="cover-upload" id="cover-drop" style="aspect-ratio:16/5;max-width:480px">
+        <input type="file" id="f-cover" accept="image/*" onchange="previewCover(this)">
+        <img id="cover-preview" style="display:none">
+        <button class="cover-clear" id="cover-clear" onclick="clearCover(event)">✕ 移除</button>
+        <div class="cover-hint" id="cover-hint">
+          <div style="font-size:32px;opacity:0.3;margin-bottom:8px">🖼</div>
+          點擊上傳封面圖片
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">基本資訊</div>
+      <div class="form-grid-3">
+        <div class="form-row">
+          <label>來源平台</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select id="f-platform" style="flex:1"></select>
+            <button type="button" class="btn btn-outline btn-sm" onclick="addPlatform()" style="white-space:nowrap;flex-shrink:0">＋ 新增平台</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>日期</label>
+          <input type="date" id="f-date">
+        </div>
+        <div class="form-row">
+          <label>置頂</label>
+          <select id="f-pin">
+            <option value="0">不置頂</option>
+            <option value="1">置頂顯示</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>文章標題</label>
+        <input type="text" id="f-title" placeholder="例：CORTIS Mini Album Vol.1 — 這張為什麼值得買">
+      </div>
+      <div class="form-row">
+        <label>摘要（顯示在選物卡片）</label>
+        <input type="text" id="f-desc" placeholder="一句話說明這篇文章的重點">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">分類標籤</div>
+      <div class="form-row">
+        <label>新增標籤</label>
+        <div class="tag-input-wrap">
+          <input type="text" id="f-tag-input" placeholder="例：專輯、美妝、服飾" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag()}">
+          <button class="btn btn-outline btn-sm" onclick="addTag()">新增</button>
+        </div>
+        <div class="tags-display" id="tags-display"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">文章內容</div>
+      <div class="form-row">
+        <label>內文</label>
+        <div class="editor-toolbar">
+          <button type="button" class="tool-btn" onclick="execCmd('bold')"><b>B</b></button>
+          <button type="button" class="tool-btn" onclick="execCmd('italic')"><i>I</i></button>
+          <button type="button" class="tool-btn" onclick="execCmd('insertUnorderedList')">≡</button>
+          <button type="button" class="tool-btn" onclick="execCmd('formatBlock','h3')">H</button>
+          <div class="tool-divider"></div>
+          <button type="button" class="tool-btn tool-img" onclick="insertImage()">📷 插入圖片</button>
+          <input type="file" id="img-input" accept="image/*" style="display:none" onchange="handleImageInsert(this)">
+          <div class="tool-divider"></div>
+          <button type="button" class="tool-btn tool-img" onclick="openPreview()">👁 預覽</button>
+        </div>
+        <div id="f-content" class="rich-editor" contenteditable="true" data-placeholder="在這裡寫文章內容⋯" onmouseup="saveSelection()" onkeyup="saveSelection();updateWordCount()"></div>
+        <div class="word-count" id="word-count">0 字</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">外部連結</div>
+      <div class="form-grid">
+        <div class="form-row"><label>連結網址</label><input type="url" id="f-link" placeholder="https://weverseshop.io"></div>
+        <div class="form-row"><label>按鈕文字</label><input type="text" id="f-link-label" placeholder="去 Weverse Shop 看"></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="publishArticle(false)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="publish-btn-label">發布文章</span>
+      </button>
+      <button class="btn btn-draft" onclick="publishArticle(true)">存為草稿</button>
+      <button class="btn btn-outline" onclick="openPreview()">預覽</button>
+      <button class="btn btn-secondary" onclick="clearForm()">清除</button>
+    </div>
+  </div>
+
+  <!-- ALL ARTICLES -->
+  <div class="page" id="page-articles">
+    <div class="page-title">已發布 <span>文章</span></div>
+    <div class="page-sub">拖拉 ⠿ 調整順序，⭐ 置頂文章會固定在最上方。</div>
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="搜尋文章標題⋯" oninput="renderArticles(this.value)">
+    </div>
+    <div id="article-list"></div>
+  </div>
+
+  <!-- DRAFTS -->
+  <div class="page" id="page-drafts">
+    <div class="page-title">草稿 <span>Drafts</span></div>
+    <div class="page-sub">草稿不會顯示在網站上，按「發布」才會上線。</div>
+    <div id="draft-list"></div>
+  </div>
+
+  <!-- COMMENTS -->
+  <div class="page" id="page-comments">
+    <div class="page-title">留言 <span>管理</span></div>
+    <div class="page-sub">查看所有文章的留言，可以回覆或刪除。</div>
+    <div id="comment-list-admin"></div>
+  </div>
+
+  <!-- EMAILS -->
+  <div class="page" id="page-emails">
+    <div class="page-title">Email <span>名單</span></div>
+    <div class="page-sub">登記上線通知的 Email 清單。</div>
+    <div class="card">
+      <div class="card-title">手動新增 Email <button class="btn btn-outline btn-sm" onclick="exportEmails()">匯出 CSV</button></div>
+      <div class="form-grid" style="margin-bottom:0">
+        <div class="form-row" style="margin:0"><input type="email" id="new-email" placeholder="new@email.com" onkeydown="if(event.key==='Enter')addEmail()"></div>
+        <button class="btn btn-primary" onclick="addEmail()" style="align-self:end">新增</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">訂閱名單（<span id="email-count">0</span> 人）</div>
+      <div id="email-list"></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="page" id="page-about">
+    <div class="page-title">關於 <span>頁面</span></div>
+    <div class="page-sub">編輯關於頁面的內容，儲存後即時生效。</div>
+    <div class="card">
+      <div class="card-title">Hero 區塊</div>
+      <div class="form-row"><label>主標題（可用 &lt;br&gt; 換行）</label><input type="text" id="ab-title" value="韓貨，&lt;br&gt;&lt;span&gt;從此不難。&lt;/span&gt;"></div>
+      <div class="form-row"><label>副標語</label><textarea id="ab-desc" style="min-height:80px">Dash 是一個由韓迷做給韓迷的選物平台。我們每週精選來自 Weverse Shop、Olive Young、Musinsa 的好物，告訴你值不值得買、怎麼最划算地買到台灣。</textarea></div>
+      <div class="form-row">
+        <label>Hero 封面圖</label>
+        <div class="cover-upload" style="aspect-ratio:16/4;max-width:480px" onclick="document.getElementById('ab-hero-file').click()">
+          <input type="file" id="ab-hero-file" accept="image/*" style="display:none" onchange="previewAboutImg(this,'ab-hero-preview','ab-hero-hint')">
+          <img id="ab-hero-preview" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <div class="cover-hint" id="ab-hero-hint">點擊上傳 Hero 圖片</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">故事區塊</div>
+      <div class="form-row"><label>故事內文（段落間空一行）</label><textarea id="ab-story" style="min-height:140px">一切從一張買不到的專輯開始。韓網介面全是韓文，到底要買哪個版本、哪裡最划算，完全不知道從何下手——這是很多台灣韓迷都經歷過的挫折。
+
+Dash 的創辦人是多媒體設計系的學生，同時也是 CORTIS 的粉絲。她決定把這個過程整理清楚，做成一個讓所有人都能輕鬆上手的選物指南。</textarea></div>
+      <div class="form-row">
+        <label>故事配圖（右側圖片）</label>
+        <div class="cover-upload" style="aspect-ratio:4/3;max-width:320px" onclick="document.getElementById('ab-story-file').click()">
+          <input type="file" id="ab-story-file" accept="image/*" style="display:none" onchange="previewAboutImg(this,'ab-story-preview','ab-story-hint')">
+          <img id="ab-story-preview" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <div class="cover-hint" id="ab-story-hint">點擊上傳圖片</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">目標區塊配圖</div>
+      <div class="form-row">
+        <label>目標區塊配圖（左側圖片）</label>
+        <div class="cover-upload" style="aspect-ratio:4/3;max-width:320px" onclick="document.getElementById('ab-mission-file').click()">
+          <input type="file" id="ab-mission-file" accept="image/*" style="display:none" onchange="previewAboutImg(this,'ab-mission-preview','ab-mission-hint')">
+          <img id="ab-mission-preview" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <div class="cover-hint" id="ab-mission-hint">點擊上傳圖片</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">首頁浮動卡片</div>
+      <div id="float-cards-editor">
+        <div class="float-card-edit" style="display:grid;grid-template-columns:60px 1fr 1fr;gap:10px;margin-bottom:12px;align-items:center">
+          <div class="form-row" style="margin:0"><label>Emoji</label><input type="text" class="fc-emoji" value="💿" style="text-align:center;font-size:20px"></div>
+          <div class="form-row" style="margin:0"><label>標題</label><input type="text" class="fc-title" value="Weverse Shop"></div>
+          <div class="form-row" style="margin:0"><label>副標</label><input type="text" class="fc-sub" value="專輯 · 周邊 · 限定版"></div>
+        </div>
+        <div class="float-card-edit" style="display:grid;grid-template-columns:60px 1fr 1fr;gap:10px;margin-bottom:12px;align-items:center">
+          <div class="form-row" style="margin:0"><label>Emoji</label><input type="text" class="fc-emoji" value="🌿" style="text-align:center;font-size:20px"></div>
+          <div class="form-row" style="margin:0"><label>標題</label><input type="text" class="fc-title" value="Olive Young"></div>
+          <div class="form-row" style="margin:0"><label>副標</label><input type="text" class="fc-sub" value="韓系美妝 · 保養"></div>
+        </div>
+        <div class="float-card-edit" style="display:grid;grid-template-columns:60px 1fr 1fr;gap:10px;align-items:center">
+          <div class="form-row" style="margin:0"><label>Emoji</label><input type="text" class="fc-emoji" value="👕" style="text-align:center;font-size:20px"></div>
+          <div class="form-row" style="margin:0"><label>標題</label><input type="text" class="fc-title" value="Musinsa"></div>
+          <div class="form-row" style="margin:0"><label>副標</label><input type="text" class="fc-sub" value="設計師品牌 · 潮流"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">首頁背景設定</div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label>背景漸層起始色</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="ab-bg-from" value="#eef3fa" style="width:48px;height:40px;padding:2px;border-radius:6px;cursor:pointer" oninput="document.getElementById('ab-bg-from-hex').value=this.value">
+            <input type="text" id="ab-bg-from-hex" value="#eef3fa" oninput="document.getElementById('ab-bg-from').value=this.value">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>背景漸層結束色</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="ab-bg-to" value="#ffffff" style="width:48px;height:40px;padding:2px;border-radius:6px;cursor:pointer" oninput="document.getElementById('ab-bg-to-hex').value=this.value">
+            <input type="text" id="ab-bg-to-hex" value="#ffffff" oninput="document.getElementById('ab-bg-to').value=this.value">
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;height:40px;border-radius:8px;border:1px solid var(--border)" id="bg-preview"></div>
+    </div>
+
+    <button class="btn btn-primary" onclick="saveAbout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      儲存所有設定
+    </button>
+  </div>
+
+  <!-- WISHES -->
+  <div class="page" id="page-wishes">
+    <div class="page-title">許願 <span>清單</span></div>
+    <div class="page-sub">用戶許願希望 Dash 介紹的產品或內容。</div>
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="搜尋許願內容⋯" oninput="renderWishes(this.value)">
+    </div>
+    <div id="wish-list"></div>
+  </div>
+
+  <!-- BACKUP -->
+  <div class="page" id="page-backup">
+    <div class="page-title">備份 <span>匯入</span></div>
+    <div class="page-sub">匯出所有資料備份，或從備份檔案還原。</div>
+    <div class="card">
+      <div class="card-title">匯出備份</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.7">將所有文章、草稿、Email 名單匯出為 JSON 備份。</p>
+      <button class="btn btn-primary" onclick="exportBackup()">下載備份</button>
+    </div>
+    <div class="card">
+      <div class="card-title">匯入備份</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.7">從備份 JSON 還原資料。注意：這會覆蓋所有現有資料。</p>
+      <div class="form-row"><label>選擇備份檔案</label><input type="file" id="import-file" accept=".json" onchange="importBackup(this)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div class="modal-overlay" id="preview-modal" onclick="if(event.target===this)closePreview()">
+  <div class="modal">
+    <button class="modal-close" onclick="closePreview()">✕ 關閉</button>
+    <div id="preview-content"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- PLATFORM MANAGER MODAL -->
+<div class="modal-overlay" id="platform-modal" onclick="if(event.target===this)closePlatformManager()">
+  <div class="modal" style="max-width:560px;max-height:80vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closePlatformManager()">✕ 關閉</button>
+    <h2 style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:0.04em;margin-bottom:20px">管理 <span style="color:var(--blue)">平台</span></h2>
+    <div id="platform-list" style="margin-bottom:20px"></div>
+    <div style="display:flex;gap:8px;padding-top:16px;border-top:1px solid var(--border)">
+      <input type="text" id="new-platform-input" placeholder="新平台名稱" style="flex:1;border:1.5px solid var(--border);border-radius:6px;padding:10px 14px;font-family:'Noto Sans TC',sans-serif;font-size:14px;outline:none" onkeydown="if(event.key==='Enter')submitNewPlatform()">
+      <button class="btn btn-primary btn-sm" id="platform-add-btn" onclick="submitNewPlatform()">新增</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ STORAGE ══
+const DB = {
+  get: (k, def=[]) => { try { return JSON.parse(localStorage.getItem(k) || JSON.stringify(def)); } catch { return def; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+};
+const getArticles = () => DB.get('dash_articles');
+const getDrafts   = () => DB.get('dash_drafts');
+const getEmails   = () => DB.get('dash_emails');
+const getAllComments = () => {
+  const all = [];
+  getArticles().forEach(a => {
+    DB.get('comments_' + a.id).forEach(c => all.push({ ...c, articleId: a.id, articleTitle: a.title }));
+  });
+  return all;
+};
+
+// ══ TOAST ══
+function toast(msg, isError=false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = isError ? 'error show' : 'show';
+  setTimeout(() => el.className = '', 2500);
+}
+
+// ══ PAGE SWITCH ══
+function switchPage(el, id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+  ({ dashboard: renderDashboard, articles: ()=>renderArticles(''), drafts: renderDrafts, comments: renderComments, emails: renderEmails, about: loadAboutForm, wishes: ()=>renderWishes('') })[id]?.();
+  updateBadges();
+}
+
+function updateBadges() {
+  const d = getDrafts(), c = getAllComments().filter(x => !x.replied);
+  const db = document.getElementById('draft-badge');
+  db.style.display = d.length ? '' : 'none'; db.textContent = d.length;
+  const cb = document.getElementById('comment-badge');
+  cb.style.display = c.length ? '' : 'none'; cb.textContent = c.length;
+  const wishes = JSON.parse(localStorage.getItem('dash_wishes') || '[]');
+  const pending = wishes.filter(w => w.status === '待處理').length;
+  const wb = document.getElementById('wish-badge');
+  if (wb) { wb.style.display = pending ? '' : 'none'; wb.textContent = pending; }
+}
+
+// ══ TAGS ══
+let currentTags = [];
+function addTag() {
+  const input = document.getElementById('f-tag-input');
+  const val = input.value.trim();
+  if (!val || currentTags.includes(val)) { input.value=''; return; }
+  currentTags.push(val); input.value=''; renderTags();
+}
+function removeTag(t) { currentTags = currentTags.filter(x => x !== t); renderTags(); }
+function renderTags() {
+  document.getElementById('tags-display').innerHTML = currentTags.map(t =>
+    `<span class="tag-pill">${t}<button onclick="removeTag('${t}')">×</button></span>`).join('');
+}
+
+// ══ COVER ══
+let coverDataUrl = '';
+function previewCover(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    coverDataUrl = e.target.result;
+    document.getElementById('cover-preview').src = coverDataUrl;
+    document.getElementById('cover-preview').style.display = 'block';
+    document.getElementById('cover-hint').style.display = 'none';
+    document.getElementById('cover-clear').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+function clearCover(e) {
+  e.stopPropagation(); coverDataUrl = '';
+  document.getElementById('cover-preview').style.display = 'none';
+  document.getElementById('cover-hint').style.display = 'block';
+  document.getElementById('cover-clear').style.display = 'none';
+  document.getElementById('f-cover').value = '';
+}
+
+// ══ RICH EDITOR ══
+function execCmd(cmd, val=null) { document.getElementById('f-content').focus(); document.execCommand(cmd, false, val); }
+let savedRange = null;
+function saveSelection() { const s = window.getSelection(); if (s.rangeCount) savedRange = s.getRangeAt(0).cloneRange(); }
+function restoreSelection() { if (!savedRange) return; const s = window.getSelection(); s.removeAllRanges(); s.addRange(savedRange); }
+function insertImage() { saveSelection(); document.getElementById('img-input').click(); }
+function handleImageInsert(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    restoreSelection();
+    const editor = document.getElementById('f-content'); editor.focus();
+    const img = document.createElement('img'); img.src = e.target.result; img.style.maxWidth='100%';
+    const sel = window.getSelection();
+    if (sel.rangeCount) { const r = sel.getRangeAt(0); r.deleteContents(); r.insertNode(img); r.setStartAfter(img); r.setEndAfter(img); sel.removeAllRanges(); sel.addRange(r); }
+    else editor.appendChild(img);
+    input.value='';
+  };
+  reader.readAsDataURL(file);
+}
+function updateWordCount() {
+  const text = document.getElementById('f-content').innerText || '';
+  document.getElementById('word-count').textContent = text.trim().length + ' 字';
+}
+
+// ══ FORM ══
+function makeId(t) { return (t.toLowerCase().replace(/[^\w\s-]/g,'').replace(/[\s_]+/g,'-').replace(/^-+|-+$/g,'').substring(0,50)) || 'article-'+Date.now(); }
+
+function getFormData(isDraft) {
+  const title   = document.getElementById('f-title').value.trim();
+  const content = document.getElementById('f-content').innerHTML.trim();
+  const desc    = document.getElementById('f-desc').value.trim();
+  if (!title || !content || !desc) { toast('請填寫標題、摘要和內文', true); return null; }
+  const dateVal = document.getElementById('f-date').value;
+  const dateStr = dateVal
+    ? new Date(dateVal+'T12:00:00').toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'.')
+    : new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'.');
+  const editId = document.getElementById('edit-id').value;
+  return {
+    id: editId || makeId(title),
+    platform: document.getElementById('f-platform').value,
+    date: dateStr, title, cover: coverDataUrl, desc, content,
+    link: document.getElementById('f-link').value.trim(),
+    linkLabel: document.getElementById('f-link-label').value.trim() || '前往查看',
+    pinned: document.getElementById('f-pin').value === '1',
+    tags: [...currentTags], isDraft,
+  };
+}
+
+function publishArticle(isDraft) {
+  const data = getFormData(isDraft); if (!data) return;
+  const editId = document.getElementById('edit-id').value;
+  if (isDraft) {
+    let drafts = getDrafts().filter(d => d.id !== editId); drafts.unshift(data); DB.set('dash_drafts', drafts);
+    toast('草稿已儲存！');
+  } else {
+    let articles = getArticles().filter(a => a.id !== editId);
+    // Remove from drafts if editing a draft
+    DB.set('dash_drafts', getDrafts().filter(d => d.id !== editId));
+    articles.unshift(data); DB.set('dash_articles', articles);
+    toast('文章已發布！');
+  }
+  clearForm(); updateBadges();
+}
+
+function clearForm() {
+  document.getElementById('edit-id').value = '';
+  document.getElementById('form-page-title').innerHTML = '新增 <span>文章</span>';
+  document.getElementById('publish-btn-label').textContent = '發布文章';
+  ['f-title','f-desc','f-link','f-link-label'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-content').innerHTML = '';
+  document.getElementById('f-date').valueAsDate = new Date();
+  document.getElementById('f-platform').value = 'Weverse Shop';
+  document.getElementById('f-pin').value = '0';
+  coverDataUrl = ''; currentTags = []; renderTags();
+  document.getElementById('cover-preview').style.display = 'none';
+  document.getElementById('cover-hint').style.display = 'block';
+  document.getElementById('cover-clear').style.display = 'none';
+  document.getElementById('f-cover').value = '';
+  document.getElementById('word-count').textContent = '0 字';
+  renderPlatformSelect();
+}
+
+// ══ EDIT ══
+function editArticle(id) {
+  const articles = getArticles();
+  const a = articles.find(x => x.id === id); if (!a) return;
+  clearForm();
+  document.getElementById('edit-id').value = id;
+  document.getElementById('form-page-title').innerHTML = '編輯 <span>文章</span>';
+  document.getElementById('publish-btn-label').textContent = '儲存變更';
+  document.getElementById('f-title').value   = a.title;
+  document.getElementById('f-desc').value    = a.desc;
+  document.getElementById('f-link').value    = a.link || '';
+  document.getElementById('f-link-label').value = a.linkLabel || '';
+  document.getElementById('f-platform').value   = a.platform;
+  document.getElementById('f-pin').value     = a.pinned ? '1' : '0';
+  document.getElementById('f-content').innerHTML = a.content || '';
+  if (a.date) {
+    const parts = a.date.split('.');
+    if (parts.length === 3) document.getElementById('f-date').value = `${parts[0]}-${parts[1]}-${parts[2]}`;
+  }
+  if (a.cover) {
+    coverDataUrl = a.cover;
+    document.getElementById('cover-preview').src = a.cover;
+    document.getElementById('cover-preview').style.display = 'block';
+    document.getElementById('cover-hint').style.display = 'none';
+    document.getElementById('cover-clear').style.display = 'block';
+  }
+  currentTags = [...(a.tags || [])]; renderTags();
+  updateWordCount();
+  // Switch to form page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-new-article').classList.add('active');
+  document.querySelector('[onclick*="new-article"]').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ══ DELETE ══
+function deleteArticle(id) {
+  if (!confirm('確定刪除？')) return;
+  DB.set('dash_articles', getArticles().filter(a => a.id !== id));
+  toast('已刪除'); renderArticles(''); renderDashboard();
+}
+function deleteDraft(id) {
+  if (!confirm('確定刪除草稿？')) return;
+  DB.set('dash_drafts', getDrafts().filter(d => d.id !== id));
+  toast('草稿已刪除'); renderDrafts(); updateBadges();
+}
+function publishDraft(id) {
+  const drafts = getDrafts(), idx = drafts.findIndex(d => d.id === id); if (idx===-1) return;
+  const a = { ...drafts[idx], isDraft: false }; drafts.splice(idx,1); DB.set('dash_drafts', drafts);
+  const arts = getArticles(); arts.unshift(a); DB.set('dash_articles', arts);
+  toast('草稿已發布！'); renderDrafts(); updateBadges();
+}
+
+// ══ PIN ══
+function togglePin(id) {
+  const arts = getArticles(), idx = arts.findIndex(a => a.id === id); if (idx===-1) return;
+  arts[idx].pinned = !arts[idx].pinned; DB.set('dash_articles', arts);
+  toast(arts[idx].pinned ? '已置頂' : '已取消置頂'); renderArticles('');
+}
+
+// ══ DRAG SORT ══
+let dragSrc = null;
+function onDragStart(e, id) { dragSrc = id; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function onDragEnd(e) { e.currentTarget.classList.remove('dragging'); document.querySelectorAll('.list-item').forEach(el=>el.classList.remove('drag-over')); }
+function onDragOver(e, id) { e.preventDefault(); if (dragSrc === id) return; e.currentTarget.classList.add('drag-over'); }
+function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e, id) {
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+  if (!dragSrc || dragSrc === id) return;
+  let arts = getArticles();
+  const fromIdx = arts.findIndex(a => a.id === dragSrc);
+  const toIdx   = arts.findIndex(a => a.id === id);
+  if (fromIdx===-1 || toIdx===-1) return;
+  const [item] = arts.splice(fromIdx, 1); arts.splice(toIdx, 0, item);
+  DB.set('dash_articles', arts); dragSrc = null; renderArticles('');
+  toast('順序已更新');
+}
+
+// ══ RENDER ARTICLES ══
+function renderArticles(q='') {
+  let arts = getArticles();
+  if (q) arts = arts.filter(a => a.title.toLowerCase().includes(q.toLowerCase()));
+  // Pinned first
+  arts = [...arts.filter(a=>a.pinned), ...arts.filter(a=>!a.pinned)];
+  const el = document.getElementById('article-list');
+  if (!arts.length) { el.innerHTML = '<div class="empty">沒有找到文章。</div>'; return; }
+  el.innerHTML = arts.map(a => `
+    <div class="list-item ${a.pinned?'pinned':''}" id="item-${a.id}"
+      draggable="true"
+      ondragstart="onDragStart(event,'${a.id}')"
+      ondragend="onDragEnd(event)"
+      ondragover="onDragOver(event,'${a.id}')"
+      ondragleave="onDragLeave(event)"
+      ondrop="onDrop(event,'${a.id}')">
+      <div class="drag-handle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
+      <div class="list-item-info">
+        <div class="list-item-title">${a.pinned?'⭐ ':''}${a.title}</div>
+        <div class="list-item-meta">
+          <span class="tag">${a.platform}</span>
+          ${(a.tags||[]).map(t=>`<span class="tag tag-custom">${t}</span>`).join('')}
+          <span class="meta-text">${a.date}</span>
+        </div>
+      </div>
+      <div class="list-actions">
+        <button class="btn btn-secondary btn-sm" onclick="togglePin('${a.id}')">${a.pinned?'取消置頂':'⭐ 置頂'}</button>
+        <button class="btn btn-outline btn-sm" onclick="openPreviewById('${a.id}')">預覽</button>
+        <button class="btn btn-secondary btn-sm" onclick="editArticle('${a.id}')">編輯</button>
+        <button class="btn btn-danger" onclick="deleteArticle('${a.id}')">刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderDrafts() {
+  const el = document.getElementById('draft-list');
+  const drafts = getDrafts();
+  if (!drafts.length) { el.innerHTML = '<div class="empty">沒有草稿。</div>'; return; }
+  el.innerHTML = drafts.map(d => `
+    <div class="list-item">
+      <div class="list-item-info">
+        <div class="list-item-title">${d.title}</div>
+        <div class="list-item-meta"><span class="tag tag-draft">草稿</span><span class="meta-text">${d.date}</span></div>
+      </div>
+      <div class="list-actions">
+        <button class="btn btn-primary btn-sm" onclick="publishDraft('${d.id}')">發布</button>
+        <button class="btn btn-secondary btn-sm" onclick="editArticle('${d.id}')">編輯</button>
+        <button class="btn btn-danger" onclick="deleteDraft('${d.id}')">刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+// ══ PREVIEW ══
+function openPreview() {
+  const title   = document.getElementById('f-title').value.trim() || '（無標題）';
+  const desc    = document.getElementById('f-desc').value.trim();
+  const content = document.getElementById('f-content').innerHTML;
+  const platform= document.getElementById('f-platform').value;
+  const cover   = coverDataUrl;
+  const tags    = currentTags;
+  showPreviewModal({ title, desc, content, platform, cover, tags, date: new Date().toLocaleDateString('zh-TW') });
+}
+function openPreviewById(id) {
+  const a = getArticles().find(x => x.id === id); if (!a) return;
+  showPreviewModal(a);
+}
+function showPreviewModal(a) {
+  document.getElementById('preview-content').innerHTML = `
+    <div style="margin-bottom:8px">
+      <span class="preview-platform">${a.platform||''}</span>
+      <span class="preview-date">${a.date||''}</span>
+    </div>
+    <div class="preview-title">${a.title||''}</div>
+    <div class="preview-desc">${a.desc||''}</div>
+    ${a.cover ? `<div class="preview-cover"><img src="${a.cover}"></div>` : ''}
+    ${(a.tags||[]).length ? `<div class="preview-tags">${a.tags.map(t=>`<span class="tag tag-custom">${t}</span>`).join('')}</div>` : ''}
+    <div class="preview-body">${a.content||''}</div>
+  `;
+  document.getElementById('preview-modal').classList.add('open');
+}
+function closePreview() { document.getElementById('preview-modal').classList.remove('open'); }
+
+// ══ COMMENTS ══
+function renderComments() {
+  const el = document.getElementById('comment-list-admin');
+  const all = getAllComments();
+  if (!all.length) { el.innerHTML = '<div class="empty">還沒有留言。</div>'; return; }
+  el.innerHTML = all.map((c,i) => `
+    <div class="comment-item">
+      <div class="comment-article">📄 ${c.articleTitle}</div>
+      <div class="comment-header"><strong style="font-size:14px">${c.name}</strong><span class="meta-text">${c.date}</span></div>
+      <div class="comment-text">${c.text}</div>
+      ${c.reply ? `<div class="reply-box"><div class="reply-label">你的回覆</div>${c.reply}</div>` : ''}
+      <div class="reply-form" id="rf-${i}">
+        <textarea placeholder="輸入回覆⋯" id="rt-${i}"></textarea>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn btn-primary btn-sm" onclick="submitReply('${c.articleId}','${c.name}',${i})">送出</button>
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('rf-${i}').style.display='none'">取消</button>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        ${!c.reply?`<button class="btn btn-outline btn-sm" onclick="document.getElementById('rf-${i}').style.display='block'">回覆</button>`:''}
+        <button class="btn btn-danger" onclick="deleteComment('${c.articleId}','${c.name}')">刪除</button>
+      </div>
+    </div>`).join('');
+}
+function submitReply(articleId, name, idx) {
+  const text = document.getElementById('rt-'+idx).value.trim(); if (!text) return;
+  const comments = DB.get('comments_'+articleId);
+  const ci = comments.findIndex(c => c.name===name);
+  if (ci!==-1) { comments[ci].reply=text; comments[ci].replied=true; }
+  DB.set('comments_'+articleId, comments); toast('回覆已送出'); renderComments(); updateBadges();
+}
+function deleteComment(articleId, name) {
+  if (!confirm('確定刪除？')) return;
+  DB.set('comments_'+articleId, DB.get('comments_'+articleId).filter(c=>c.name!==name));
+  toast('已刪除'); renderComments();
+}
+
+// ══ EMAILS ══
+function renderEmails() {
+  const emails = getEmails();
+  document.getElementById('email-count').textContent = emails.length;
+  const el = document.getElementById('email-list');
+  if (!emails.length) { el.innerHTML = '<div class="empty">還沒有訂閱者。</div>'; return; }
+  el.innerHTML = emails.map((e,i) => `
+    <div class="email-item">
+      <span>${e.email}</span>
+      <div style="display:flex;align-items:center;gap:12px"><span class="meta-text">${e.date}</span><button class="btn btn-danger" onclick="deleteEmail(${i})">刪除</button></div>
+    </div>`).join('');
+}
+function addEmail() {
+  const val = document.getElementById('new-email').value.trim();
+  if (!val||!val.includes('@')) { toast('請輸入有效的 Email',true); return; }
+  const emails = getEmails();
+  if (emails.find(e=>e.email===val)) { toast('已在名單中',true); return; }
+  emails.unshift({ email: val, date: new Date().toLocaleDateString('zh-TW') });
+  DB.set('dash_emails', emails); document.getElementById('new-email').value=''; toast('已新增'); renderEmails();
+}
+function deleteEmail(i) { const e=getEmails(); e.splice(i,1); DB.set('dash_emails',e); toast('已刪除'); renderEmails(); }
+function exportEmails() {
+  const emails = getEmails(); if (!emails.length) { toast('名單是空的',true); return; }
+  download('dash-emails.csv','Email,日期\n'+emails.map(e=>`${e.email},${e.date}`).join('\n'),'text/csv');
+}
+
+// ══ BACKUP ══
+function exportBackup() {
+  download('dash-backup-'+new Date().toISOString().slice(0,10)+'.json', JSON.stringify({ articles:getArticles(), drafts:getDrafts(), emails:getEmails(), exportedAt:new Date().toISOString() },null,2),'application/json');
+  toast('備份下載中！');
+}
+function importBackup(input) {
+  const file=input.files[0]; if (!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try {
+      const data=JSON.parse(e.target.result);
+      if (!confirm('確定匯入？這會覆蓋所有現有資料。')) return;
+      if (data.articles) DB.set('dash_articles',data.articles);
+      if (data.drafts)   DB.set('dash_drafts',data.drafts);
+      if (data.emails)   DB.set('dash_emails',data.emails);
+      toast('備份匯入成功！'); renderDashboard(); updateBadges();
+    } catch { toast('檔案格式錯誤',true); }
+  };
+  reader.readAsText(file);
+}
+function download(filename, content, type) {
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([content],{type})); a.download=filename; a.click();
+}
+
+// ══ DASHBOARD ══
+function renderDashboard() {
+  const arts=getArticles(), drafts=getDrafts(), emails=getEmails(), comments=getAllComments();
+  document.getElementById('s-articles').textContent = arts.length;
+  document.getElementById('s-drafts').textContent   = drafts.length;
+  document.getElementById('s-comments').textContent = comments.length;
+  document.getElementById('s-emails').textContent   = emails.length;
+  const re=document.getElementById('dash-recent');
+  re.innerHTML = arts.slice(0,3).map(a=>`
+    <div class="list-item">
+      <div class="list-item-info">
+        <div class="list-item-title">${a.title}</div>
+        <div class="list-item-meta"><span class="tag">${a.platform}</span><span class="meta-text">${a.date}</span></div>
+      </div>
+      <div class="list-actions"><button class="btn btn-secondary btn-sm" onclick="editArticle('${a.id}')">編輯</button></div>
+    </div>`).join('') || '<div class="empty">還沒有文章。</div>';
+  const dc=document.getElementById('dash-comments');
+  dc.innerHTML = comments.slice(0,3).map(c=>`
+    <div class="list-item">
+      <div class="list-item-info">
+        <div class="list-item-title">${c.name}：${c.text}</div>
+        <div class="list-item-meta"><span class="meta-text">${c.articleTitle}</span></div>
+      </div>
+    </div>`).join('') || '<div class="empty">還沒有留言。</div>';
+}
+
+// ══ PLATFORMS ══
+const DEFAULT_PLATFORMS = ['Weverse Shop', 'Olive Young', 'Musinsa', 'Yes24', 'Interpark', 'Coupang', '其他'];
+function getPlatforms() { return DB.get('dash_platforms', DEFAULT_PLATFORMS); }
+function savePlatforms(arr) { DB.set('dash_platforms', arr); }
+
+function renderPlatformSelect() {
+  const sel = document.getElementById('f-platform');
+  const current = sel.value;
+  const platforms = getPlatforms();
+  sel.innerHTML = platforms.map(p => `<option value="${p}">${p}</option>`).join('');
+  if (current && platforms.includes(current)) sel.value = current;
+}
+
+function addPlatform() {
+  openPlatformManager();
+}
+
+function openPlatformManager() {
+  renderPlatformManager();
+  document.getElementById('platform-modal').classList.add('open');
+}
+function closePlatformManager() {
+  document.getElementById('platform-modal').classList.remove('open');
+}
+
+function renderPlatformManager() {
+  const platforms = getPlatforms();
+  const listEl = document.getElementById('platform-list');
+  listEl.style.maxHeight = '260px';
+  listEl.style.overflowY = 'auto';
+  listEl.innerHTML = platforms.map((p, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:14px">${p}</span>
+      <button class="btn btn-danger" style="font-size:11px;padding:5px 12px" onclick="deletePlatform(${i})">刪除</button>
+    </div>`).join('');
+
+}
+
+function deletePlatform(i) {
+  const platforms = getPlatforms();
+  if (!confirm('確定刪除「' + platforms[i] + '」？')) return;
+  platforms.splice(i, 1);
+  savePlatforms(platforms);
+  renderPlatformManager();
+  renderPlatformSelect();
+  toast('平台已刪除');
+}
+
+function submitNewPlatform() {
+  const input = document.getElementById('new-platform-input');
+  const name = input.value.trim();
+  if (!name) return;
+  const platforms = getPlatforms();
+  if (platforms.includes(name)) { toast('這個平台已存在', true); return; }
+  platforms.push(name);
+  savePlatforms(platforms);
+  input.value = '';
+  renderPlatformManager();
+  renderPlatformSelect();
+  document.getElementById('f-platform').value = name;
+  toast('平台已新增：' + name);
+}
+
+// ══ ABOUT PAGE ══
+const aboutImgData = {};
+
+function previewAboutImg(input, previewId, hintId) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    aboutImgData[previewId] = e.target.result;
+    document.getElementById(previewId).src = e.target.result;
+    document.getElementById(previewId).style.display = 'block';
+    document.getElementById(hintId).style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveAbout() {
+  const floatCards = Array.from(document.querySelectorAll('.float-card-edit')).map(row => ({
+    emoji: row.querySelector('.fc-emoji').value,
+    title: row.querySelector('.fc-title').value,
+    sub:   row.querySelector('.fc-sub').value,
+  }));
+  const storyRaw = document.getElementById('ab-story').value;
+  const storyText = storyRaw.split(/\n\n+/).filter(Boolean).map(p => '<p>' + p.replace(/\n/g,' ') + '</p>').join('');
+  const about = {
+    title:      document.getElementById('ab-title').value,
+    desc:       document.getElementById('ab-desc').value,
+    storyText,
+    heroImg:    aboutImgData['ab-hero-preview']    || DB.get('dash_about', {}).heroImg    || '',
+    storyImg:   aboutImgData['ab-story-preview']   || DB.get('dash_about', {}).storyImg   || '',
+    missionImg: aboutImgData['ab-mission-preview'] || DB.get('dash_about', {}).missionImg || '',
+    floatCards,
+    bgFrom: document.getElementById('ab-bg-from') ? document.getElementById('ab-bg-from').value : '#eef3fa',
+    bgTo:   document.getElementById('ab-bg-to')   ? document.getElementById('ab-bg-to').value   : '#ffffff',
+  };
+  DB.set('dash_about', about);
+  toast('設定已儲存！');
+}
+
+function loadAboutForm() {
+  try {
+    const about = DB.get('dash_about', {});
+    if (about.title) document.getElementById('ab-title').value = about.title;
+    if (about.desc)  document.getElementById('ab-desc').value  = about.desc;
+    if (about.heroImg) {
+      document.getElementById('ab-hero-preview').src = about.heroImg;
+      document.getElementById('ab-hero-preview').style.display = 'block';
+      document.getElementById('ab-hero-hint').style.display = 'none';
+    }
+    if (about.storyImg) {
+      document.getElementById('ab-story-preview').src = about.storyImg;
+      document.getElementById('ab-story-preview').style.display = 'block';
+      document.getElementById('ab-story-hint').style.display = 'none';
+    }
+    if (about.missionImg) {
+      document.getElementById('ab-mission-preview').src = about.missionImg;
+      document.getElementById('ab-mission-preview').style.display = 'block';
+      document.getElementById('ab-mission-hint').style.display = 'none';
+    }
+    if (about.floatCards) {
+      const rows = document.querySelectorAll('.float-card-edit');
+      about.floatCards.forEach((c, i) => {
+        if (!rows[i]) return;
+        rows[i].querySelector('.fc-emoji').value = c.emoji;
+        rows[i].querySelector('.fc-title').value = c.title;
+        rows[i].querySelector('.fc-sub').value   = c.sub;
+      });
+    }
+    if (about.bgFrom) { document.getElementById('ab-bg-from').value = about.bgFrom; document.getElementById('ab-bg-from-hex').value = about.bgFrom; }
+    if (about.bgTo)   { document.getElementById('ab-bg-to').value   = about.bgTo;   document.getElementById('ab-bg-to-hex').value   = about.bgTo; }
+    updateBgPreview();
+  } catch(e) {}
+}
+
+function updateBgPreview() {
+  const from = document.getElementById('ab-bg-from')?.value || '#eef3fa';
+  const to   = document.getElementById('ab-bg-to')?.value   || '#ffffff';
+  const el   = document.getElementById('bg-preview');
+  if (el) el.style.background = `linear-gradient(135deg, ${from} 0%, ${to} 100%)`;
+}
+
+// Live preview for color pickers
+document.addEventListener('input', e => {
+  if (e.target.id && e.target.id.startsWith('ab-bg')) updateBgPreview();
+});
+
+// ══ WISHES ══
+function renderWishes(q='') {
+  const wishes = JSON.parse(localStorage.getItem('dash_wishes') || '[]');
+  const el = document.getElementById('wish-list');
+  let filtered = q ? wishes.filter(w => w.content.toLowerCase().includes(q.toLowerCase())) : wishes;
+  if (!filtered.length) { el.innerHTML = '<div class="empty">還沒有許願。</div>'; return; }
+
+  // Update badge
+  const pending = wishes.filter(w => w.status === '待處理').length;
+  const badge = document.getElementById('wish-badge');
+  if (badge) { badge.style.display = pending ? '' : 'none'; badge.textContent = pending; }
+
+  el.innerHTML = filtered.map(w => `
+    <div class="list-item">
+      <div class="list-item-info">
+        <div class="list-item-title">${w.content}</div>
+        <div class="list-item-meta">
+          <span class="tag" style="background:${w.status==='已處理'?'#2ecc71':w.status==='考慮中'?'#f39c12':'#888'}">${w.status}</span>
+          <span class="tag tag-custom">${w.cat}</span>
+          <span class="meta-text">${w.user} · ${w.date}</span>
+          ${w.note ? `<span class="meta-text">備註：${w.note}</span>` : ''}
+        </div>
+      </div>
+      <div class="list-actions">
+        <select onchange="updateWishStatus('${w.id}',this.value)" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;outline:none;font-family:inherit">
+          <option ${w.status==='待處理'?'selected':''}>待處理</option>
+          <option ${w.status==='考慮中'?'selected':''}>考慮中</option>
+          <option ${w.status==='已處理'?'selected':''}>已處理</option>
+        </select>
+        <button class="btn btn-danger" onclick="deleteWish('${w.id}')">刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+function updateWishStatus(id, status) {
+  const wishes = JSON.parse(localStorage.getItem('dash_wishes') || '[]');
+  const idx = wishes.findIndex(w => w.id === id);
+  if (idx !== -1) { wishes[idx].status = status; localStorage.setItem('dash_wishes', JSON.stringify(wishes)); }
+  toast('狀態已更新');
+  renderWishes();
+  updateBadges();
+}
+
+function deleteWish(id) {
+  if (!confirm('確定刪除？')) return;
+  const wishes = JSON.parse(localStorage.getItem('dash_wishes') || '[]').filter(w => w.id !== id);
+  localStorage.setItem('dash_wishes', JSON.stringify(wishes));
+  toast('已刪除'); renderWishes(); updateBadges();
+}
+
+// ══ INIT ══
+document.getElementById('f-date').valueAsDate = new Date();
+renderPlatformSelect();
+renderDashboard(); updateBadges();
+loadAboutForm();
+</script>
+</body>
+</html>

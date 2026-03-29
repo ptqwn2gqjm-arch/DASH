@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="管理你的 Dash 帳號、查看收藏文章和留言記錄。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dash">
+<meta property="og:title" content="Dash — 我的帳號">
+<meta property="og:description" content="管理你的 Dash 帳號、查看收藏文章和留言記錄。">
+<meta property="og:image" content="https://dash.tw/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dash — 我的帳號">
+<meta name="twitter:description" content="管理你的 Dash 帳號、查看收藏文章和留言記錄。">
+<title>Dash — 我的帳號</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #0F4C81; --blue-light: #1a6bb5; --text: #111; --muted: #888; --border: #e8e8e8; --bg: #f5f7fa; --red: #e74c3c; --green: #2ecc71; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  nav { position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; gap: 16px; z-index: 100; }
+  .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: 0.08em; text-decoration: none; flex-shrink: 0; }
+  .nav-logo .da { color: var(--blue); }
+  .nav-logo .sh { color: var(--text); }
+  .nav-search { flex: 1; max-width: 360px; position: relative; display: flex; align-items: center; margin: 0 auto; }
+  .nav-search input { width: 100%; padding: 8px 16px 8px 38px; border: 1.5px solid var(--border); border-radius: 20px; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; outline: none; transition: all 0.3s; background: #f5f7fa; }
+  .nav-search input:focus { border-color: var(--blue); background: white; }
+  .nav-search svg { position: absolute; left: 13px; width: 15px; height: 15px; color: var(--muted); pointer-events: none; }
+  .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; flex-shrink: 0; }
+  .nav-links a { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 14px; text-decoration: none; color: var(--muted); border-radius: 8px; transition: all 0.2s; font-size: 10px; letter-spacing: 0.05em; }
+  .nav-links a:hover { background: #f0f5ff; color: var(--blue); }
+  .nav-links a svg { width: 18px; height: 18px; stroke-width: 1.8; }
+  .nav-mine { background: var(--blue) !important; color: white !important; }
+
+  .layout { display: grid; grid-template-columns: 260px 1fr; gap: 28px; max-width: 1100px; margin: 0 auto; padding: 40px 32px; }
+
+  /* SIDEBAR */
+  .sidebar { position: sticky; top: 88px; height: fit-content; }
+  .profile-card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 28px 24px; text-align: center; margin-bottom: 12px; }
+  .avatar-wrap { position: relative; display: inline-block; margin-bottom: 16px; cursor: pointer; }
+  .avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 28px; color: white; overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: none; }
+  .avatar-edit { position: absolute; bottom: 0; right: 0; width: 26px; height: 26px; background: var(--blue); border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; }
+  .avatar-edit svg { width: 12px; height: 12px; color: white; }
+  .profile-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .profile-username { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .profile-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; background: #f0f5ff; color: var(--blue); border: 1px solid #c8d8f0; }
+
+  .side-nav { background: white; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+  .side-item { display: flex; align-items: center; gap: 10px; padding: 13px 20px; font-size: 14px; cursor: pointer; transition: all 0.2s; color: var(--muted); border-left: 3px solid transparent; }
+  .side-item:hover { background: #f8faff; color: var(--text); }
+  .side-item.active { background: #f0f5ff; color: var(--blue); border-left-color: var(--blue); font-weight: 500; }
+  .side-item.admin-item { color: var(--blue); font-weight: 500; }
+  .side-item.admin-item:hover { background: #f0f5ff; }
+  .side-item.danger { color: var(--red); }
+  .side-item.danger:hover { background: #fff5f5; }
+  .side-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .side-divider { height: 1px; background: var(--border); }
+
+  /* MAIN */
+  .main-content { min-width: 0; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 28px 32px; margin-bottom: 20px; }
+  .card-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.04em; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 12px; font-weight: 500; color: #555; margin-bottom: 7px; letter-spacing: 0.04em; }
+  .field input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Noto Sans TC', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; background: white; }
+  .field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(15,76,129,0.08); }
+  .field input[readonly] { background: var(--bg); color: var(--muted); cursor: default; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 44px; }
+  .pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); }
+  .pw-toggle svg { width: 16px; height: 16px; display: block; }
+  .strength-track { height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .strength-bar { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; width: 0; }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; transition: all 0.2s; }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+  .btn-secondary { background: var(--border); color: var(--text); }
+  .btn-danger { background: var(--red); color: white; }
+  .btn-danger:hover { opacity: 0.88; }
+  .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-outline:hover { background: #f0f5ff; }
+  .btn-sm { font-size: 12px; padding: 7px 14px; }
+
+  /* ADMIN CARD */
+  .admin-card { background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%); border-radius: 12px; padding: 28px 32px; margin-bottom: 20px; color: white; }
+  .admin-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .admin-card p { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 20px; font-weight: 300; line-height: 1.6; }
+  .admin-card a { display: inline-flex; align-items: center; gap: 8px; background: white; color: var(--blue); padding: 12px 24px; border-radius: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; transition: all 0.2s; }
+  .admin-card a:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+
+  /* TOGGLE */
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-info h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+  .toggle-info p { font-size: 12px; color: var(--muted); font-weight: 300; }
+  .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+  .toggle input:checked + .toggle-track { background: var(--blue); }
+  .toggle-track::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+  .toggle input:checked + .toggle-track::before { transform: translateX(20px); }
+
+  /* LINK ROW */
+  .link-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .link-row:last-child { border-bottom: none; }
+  .link-info { display: flex; align-items: center; gap: 12px; }
+  .link-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .link-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .link-status { font-size: 12px; color: var(--muted); }
+  .link-status.on { color: var(--green); }
+
+  /* BOOKMARKS */
+  .bookmark-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+  .bookmark-card { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: all 0.2s; }
+  .bookmark-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .bookmark-img { aspect-ratio: 4/3; background: #f0f4f8; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); overflow: hidden; }
+  .bookmark-img img { width: 100%; height: 100%; object-fit: cover; }
+  .bookmark-body { padding: 10px 12px; }
+  .bookmark-platform { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: white; background: var(--blue); padding: 2px 7px; border-radius: 20px; font-weight: 500; display: inline-block; margin-bottom: 5px; }
+  .bookmark-title { font-size: 12px; font-weight: 500; line-height: 1.4; }
+
+  /* COMMENT */
+  .comment-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-article { font-size: 11px; color: var(--blue); margin-bottom: 5px; text-decoration: none; display: block; }
+  .comment-text { font-size: 14px; line-height: 1.6; margin-bottom: 6px; }
+  .comment-reply { background: #f0f5ff; padding: 10px 14px; border-radius: 6px; font-size: 13px; color: var(--blue); margin-top: 8px; }
+  .comment-reply-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .comment-date { font-size: 11px; color: var(--muted); }
+
+  .customs-note { background: #f0f5ff; border-left: 3px solid var(--blue); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--blue); margin-bottom: 20px; line-height: 1.6; }
+  .empty { text-align: center; padding: 48px; color: var(--muted); font-size: 14px; }
+
+  #toast { position: fixed; bottom: 28px; right: 28px; color: white; padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; opacity: 0; transform: translateY(8px); transition: all 0.3s; pointer-events: none; z-index: 999; background: var(--green); }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.err { background: var(--red); }
+
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; padding: 20px 16px; }
+    .sidebar { position: static; }
+    .form-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 16px; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="da">DA</span><span class="sh">SH</span></a>
+  <div class="nav-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="搜尋文章⋯" onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='picks.html?q='+encodeURIComponent(this.value.trim())">
+  </div>
+  <ul class="nav-links">
+    <li><a href="picks.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>選物</a></li>
+    <li><a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>關於</a></li>
+    <li><a href="profile.html" class="nav-mine"><svg viewBox="0 0 24 24" fill="none" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>我的</a></li>
+  </ul>
+</nav>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="profile-card">
+      <div class="avatar-wrap" onclick="document.getElementById('avatar-input').click()">
+        <div class="avatar" id="avatar"><span id="avatar-initial">D</span><img id="avatar-img"></div>
+        <div class="avatar-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+      </div>
+      <div class="profile-name" id="sidebar-name">載入中</div>
+      <div class="profile-username" id="sidebar-username"></div>
+      <div class="profile-badge" id="profile-badge">已驗證會員</div>
+    </div>
+
+    <div class="side-nav">
+      <div class="side-item active" onclick="show('profile',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>基本資料
+      </div>
+      <div class="side-item" onclick="show('password',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>修改密碼
+      </div>
+      <div class="side-item" onclick="show('accounts',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>帳號連結
+      </div>
+      <div class="side-divider"></div>
+      <div class="side-item" onclick="show('bookmarks',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>我的收藏
+      </div>
+      <div class="side-item" onclick="show('comments',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>我的留言
+      </div>
+      <div class="side-divider"></div>
+      <div class="side-item" onclick="show('notify',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>通知設定
+      </div>
+      <div class="side-item" onclick="show('customs',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>聯絡資料
+      </div>
+      <div id="admin-divider" class="side-divider" style="display:none"></div>
+      <div id="admin-nav" class="side-item admin-item" onclick="show('admin',this)" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>後台管理
+      </div>
+      <div class="side-divider"></div>
+      <div class="side-item danger" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>登出
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+
+    <!-- PROFILE -->
+    <div class="section active" id="section-profile">
+      <div class="card">
+        <div class="card-title">基本資料</div>
+        <div class="form-grid">
+          <div class="field"><label>顯示名稱</label><input type="text" id="p-name"></div>
+          <div class="field"><label>帳號</label><input type="text" id="p-username" readonly></div>
+        </div>
+        <div class="field"><label>手機號碼</label><input type="tel" id="p-phone" placeholder="0912-345-678"></div>
+        <div class="field"><label>個人簡介</label><input type="text" id="p-bio" placeholder="用一句話介紹自己⋯"></div>
+        <button class="btn btn-primary" onclick="saveProfile()">儲存變更</button>
+      </div>
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="section" id="section-password">
+      <div class="card">
+        <div class="card-title">修改密碼</div>
+        <div class="field"><label>目前密碼</label><div class="pw-wrap"><input type="password" id="pw-cur"><button class="pw-toggle" onclick="togglePw('pw-cur')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+        <div class="field"><label>新密碼</label><div class="pw-wrap"><input type="password" id="pw-new" oninput="checkStr(this.value)"><button class="pw-toggle" onclick="togglePw('pw-new')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div><div class="strength-track"><div class="strength-bar" id="str-bar"></div></div></div>
+        <div class="field"><label>確認新密碼</label><div class="pw-wrap"><input type="password" id="pw-cfm"><button class="pw-toggle" onclick="togglePw('pw-cfm')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+        <button class="btn btn-primary" onclick="savePw()">更新密碼</button>
+      </div>
+    </div>
+
+    <!-- ACCOUNTS -->
+    <div class="section" id="section-accounts">
+      <div class="card">
+        <div class="card-title">帳號連結</div>
+        <div class="link-row">
+          <div class="link-info">
+            <div class="link-icon" style="background:#fff3f2"><svg viewBox="0 0 24 24" style="width:20px;height:20px"><path fill="#ea4335" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+            <div><div class="link-name">Google</div><div class="link-status on">已連結</div></div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="toast('解除連結功能需要串接後端。')">解除連結</button>
+        </div>
+        <div class="link-row">
+          <div class="link-info">
+            <div class="link-icon" style="background:#f0fff4"><svg viewBox="0 0 24 24" fill="#06c755" style="width:20px;height:20px"><path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></div>
+            <div><div class="link-name">LINE</div><div class="link-status">未連結</div></div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="toast('連結 LINE 功能需要串接後端。')">連結帳號</button>
+        </div>
+      </div>
+      <div class="card" style="border-color:#ffd0d0">
+        <div class="card-title" style="color:var(--red)">危險區域</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.7">刪除帳號後，所有資料將永久移除且無法復原。</p>
+        <button class="btn btn-danger" onclick="doDelete()">永久刪除帳號</button>
+      </div>
+    </div>
+
+    <!-- BOOKMARKS -->
+    <div class="section" id="section-bookmarks">
+      <div class="card">
+        <div class="card-title">我的收藏</div>
+        <div class="bookmark-grid" id="bookmark-grid"><div class="empty">還沒有收藏的文章</div></div>
+      </div>
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="section" id="section-comments">
+      <div class="card">
+        <div class="card-title">我的留言記錄</div>
+        <div id="my-comments"><div class="empty">還沒有留言記錄</div></div>
+      </div>
+    </div>
+
+    <!-- NOTIFY -->
+    <div class="section" id="section-notify">
+      <div class="card">
+        <div class="card-title">通知設定</div>
+        <div class="toggle-row"><div class="toggle-info"><h4>新文章上線通知</h4><p>每週有新選物時發送通知</p></div><label class="toggle"><input type="checkbox" id="n1" checked><div class="toggle-track"></div></label></div>
+        <div class="toggle-row"><div class="toggle-info"><h4>留言回覆通知</h4><p>有人回覆你的留言時通知你</p></div><label class="toggle"><input type="checkbox" id="n2" checked><div class="toggle-track"></div></label></div>
+        <div class="toggle-row"><div class="toggle-info"><h4>Dash 服務上線通知</h4><p>Dash 有新功能或合作上線時通知</p></div><label class="toggle"><input type="checkbox" id="n3" checked><div class="toggle-track"></div></label></div>
+        <div class="toggle-row"><div class="toggle-info"><h4>活動與優惠通知</h4><p>獨家優惠和特別活動資訊</p></div><label class="toggle"><input type="checkbox" id="n4"><div class="toggle-track"></div></label></div>
+        <div style="margin-top:20px"><button class="btn btn-primary" onclick="toast('通知設定已儲存！')">儲存設定</button></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMS -->
+    <div class="section" id="section-customs">
+      <div class="card">
+        <div class="card-title">聯絡資料</div>
+        <div style="background:#f0f5ff;border-left:3px solid var(--blue);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;color:var(--blue);margin-bottom:20px;line-height:1.6">此為備用聯絡資料，未來合作服務上線時可能使用。</div>
+        <div class="form-grid">
+          <div class="field"><label>真實姓名</label><input type="text" id="c-name" placeholder="與身分證相同"></div>
+          <div class="field"><label>身分證字號</label><input type="text" id="c-id" placeholder="A123456789"></div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>手機號碼</label><input type="tel" id="c-phone" placeholder="0912-345-678"></div>
+          <div class="field"><label>收件地址</label><input type="text" id="c-addr" placeholder="台北市..."></div>
+        </div>
+        <button class="btn btn-primary" onclick="saveCustoms()">儲存聯絡資料</button>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="section" id="section-admin">
+      <div class="admin-card">
+        <h3>🛡️ 管理員後台</h3>
+        <p>你擁有管理員權限，可以進入後台管理文章、留言、Email 名單和網站設定。</p>
+        <a href="admin.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          進入後台
+        </a>
+      </div>
+      <div class="card">
+        <div class="card-title">修改管理員密碼</div>
+        <div class="field"><label>新密碼（至少 8 個字元）</label><div class="pw-wrap"><input type="password" id="admin-pw"><button class="pw-toggle" onclick="togglePw('admin-pw')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+        <button class="btn btn-primary" onclick="saveAdminPw()">更新密碼</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── SESSION CHECK ──
+const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
+if (!session) { window.location.href = 'login.html'; }
+
+// ── HELPERS ──
+const DB = {
+  get: (k, d) => { try { return JSON.parse(localStorage.getItem(k) || JSON.stringify(d)); } catch { return d; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+};
+
+function toast(msg, isErr=false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = isErr ? 'err show' : 'show';
+  setTimeout(() => el.className = '', 2500);
+}
+
+function togglePw(id) { const el = document.getElementById(id); el.type = el.type === 'password' ? 'text' : 'password'; }
+
+function checkStr(pw) {
+  const bar = document.getElementById('str-bar'); if (!bar) return;
+  let s = 0; if (pw.length >= 8) s++; if (/[A-Z]/.test(pw)) s++; if (/[0-9]/.test(pw)) s++; if (/[^A-Za-z0-9]/.test(pw)) s++;
+  const lv = [{w:'25%',bg:'#e74c3c'},{w:'50%',bg:'#f39c12'},{w:'75%',bg:'#3498db'},{w:'100%',bg:'#2ecc71'}][Math.max(s-1,0)];
+  bar.style.width = lv.w; bar.style.background = lv.bg;
+}
+
+// ── SECTION SWITCH ──
+function show(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.side-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'bookmarks') renderBookmarks();
+  if (id === 'comments')  renderComments();
+}
+
+// ── INIT ──
+function init() {
+  if (!session) return;
+
+  const name     = session.name     || 'Dash 用戶';
+  const username = session.username || '';
+  const isAdmin  = session.isAdmin  || false;
+
+  // Sidebar
+  document.getElementById('sidebar-name').textContent     = name;
+  document.getElementById('sidebar-username').textContent = username;
+  document.getElementById('avatar-initial').textContent   = name.charAt(0).toUpperCase();
+
+  // Admin badge + nav
+  if (isAdmin) {
+    const badge = document.getElementById('profile-badge');
+    badge.innerHTML = '🛡️ 管理員';
+    badge.style.background    = '#fff3cd';
+    badge.style.color         = '#856404';
+    badge.style.borderColor   = '#ffc107';
+    document.getElementById('admin-nav').style.display     = 'flex';
+    document.getElementById('admin-divider').style.display = 'block';
+  }
+
+  // Avatar
+  const user = DB.get('dash_user', {});
+  if (user.avatar) {
+    const img = document.getElementById('avatar-img');
+    img.src = user.avatar; img.style.display = 'block';
+    document.getElementById('avatar-initial').style.display = 'none';
+  }
+
+  // Fill form
+  document.getElementById('p-name').value     = name;
+  document.getElementById('p-username').value = username;
+  document.getElementById('p-phone').value    = user.phone || '';
+  document.getElementById('p-bio').value      = user.bio   || '';
+
+  const customs = DB.get('dash_customs', {});
+  document.getElementById('c-name').value  = customs.name  || '';
+  document.getElementById('c-id').value    = customs.id    || '';
+  document.getElementById('c-phone').value = customs.phone || '';
+  document.getElementById('c-addr').value  = customs.addr  || '';
+}
+
+// ── AVATAR ──
+function uploadAvatar(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const user = DB.get('dash_user', {}); user.avatar = e.target.result; DB.set('dash_user', user);
+    const img = document.getElementById('avatar-img'); img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('avatar-initial').style.display = 'none';
+    toast('頭貼已更新！');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── PROFILE ──
+function saveProfile() {
+  const user = DB.get('dash_user', {});
+  user.name  = document.getElementById('p-name').value.trim() || session.name;
+  user.phone = document.getElementById('p-phone').value.trim();
+  user.bio   = document.getElementById('p-bio').value.trim();
+  DB.set('dash_user', user);
+  document.getElementById('sidebar-name').textContent = user.name;
+  toast('資料已儲存！');
+}
+
+// ── PASSWORD ──
+function savePw() {
+  const cur = document.getElementById('pw-cur').value;
+  const nw  = document.getElementById('pw-new').value;
+  const cfm = document.getElementById('pw-cfm').value;
+  if (!cur || !nw || !cfm)   { toast('請填寫所有欄位', true); return; }
+  if (nw.length < 8)         { toast('密碼至少需要 8 個字元', true); return; }
+  if (nw !== cfm)            { toast('兩次密碼不一致', true); return; }
+  const users = JSON.parse(localStorage.getItem('dash_users') || '[]');
+  const idx = users.findIndex(u => u.username === session.username);
+  if (idx !== -1 && users[idx].password !== cur) { toast('目前密碼不正確', true); return; }
+  if (idx !== -1) { users[idx].password = nw; localStorage.setItem('dash_users', JSON.stringify(users)); }
+  toast('密碼已更新！');
+}
+
+// ── ADMIN PW ──
+function saveAdminPw() {
+  const pw = document.getElementById('admin-pw').value;
+  if (!pw || pw.length < 8) { toast('密碼至少 8 個字元', true); return; }
+  const users = JSON.parse(localStorage.getItem('dash_users') || '[]');
+  const idx = users.findIndex(u => u.username === 'dash_admin');
+  if (idx !== -1) { users[idx].password = pw; localStorage.setItem('dash_users', JSON.stringify(users)); }
+  document.getElementById('admin-pw').value = '';
+  toast('管理員密碼已更新！');
+}
+
+// ── BOOKMARKS ──
+function renderBookmarks() {
+  const bookmarks = DB.get('dash_bookmarks', []);
+  const articles  = DB.get('dash_articles', []);
+  const saved     = articles.filter(a => bookmarks.includes(a.id));
+  const grid      = document.getElementById('bookmark-grid');
+  if (!saved.length) { grid.innerHTML = '<div class="empty">還沒有收藏的文章</div>'; return; }
+  grid.innerHTML = saved.map(a => `
+    <a class="bookmark-card" href="article.html?id=${a.id}">
+      <div class="bookmark-img">${a.cover ? `<img src="${a.cover}">` : '圖片'}</div>
+      <div class="bookmark-body"><span class="bookmark-platform">${a.platform}</span><div class="bookmark-title">${a.title}</div></div>
+    </a>`).join('');
+}
+
+// ── COMMENTS ──
+function renderComments() {
+  const articles = DB.get('dash_articles', []);
+  const el = document.getElementById('my-comments');
+  const all = [];
+  articles.forEach(a => {
+    DB.get('comments_' + a.id, []).forEach(c => {
+      if (c.name === session.name) all.push({ ...c, articleId: a.id, articleTitle: a.title });
+    });
+  });
+  if (!all.length) { el.innerHTML = '<div class="empty">還沒有留言記錄</div>'; return; }
+  el.innerHTML = all.map(c => `
+    <div class="comment-item">
+      <a class="comment-article" href="article.html?id=${c.articleId}">📄 ${c.articleTitle}</a>
+      <div class="comment-text">${c.text}</div>
+      ${c.reply ? `<div class="comment-reply"><span class="comment-reply-label">Dash 回覆</span>${c.reply}</div>` : ''}
+      <div class="comment-date">${c.date}</div>
+    </div>`).join('');
+}
+
+// ── CUSTOMS ──
+function saveCustoms() {
+  DB.set('dash_customs', {
+    name:  document.getElementById('c-name').value.trim(),
+    id:    document.getElementById('c-id').value.trim(),
+    phone: document.getElementById('c-phone').value.trim(),
+    addr:  document.getElementById('c-addr').value.trim(),
+  });
+  toast('聯絡資料已儲存！');
+}
+
+// ── LOGOUT ──
+function doLogout() {
+  if (confirm('確定要登出嗎？')) { localStorage.removeItem('dash_session'); window.location.href = 'login.html'; }
+}
+
+// ── DELETE ──
+function doDelete() {
+  if (confirm('確定要永久刪除帳號嗎？此操作無法復原。')) {
+    if (confirm('再次確認：所有資料將永久刪除。確定繼續嗎？')) {
+      toast('帳號刪除功能需要串接後端服務。（展示版本）');
+    }
+  }
+}
+
+// ── START ──
+init();
+</script>
+<footer style="padding:20px 32px;border-top:1px solid #e8e8e8;background:white;text-align:center;font-size:12px;color:#888;margin-top:40px">
+  © 2026 Dash · <a href="index.html" style="color:#0F4C81;text-decoration:none">回首頁</a> · <a href="picks.html" style="color:#0F4C81;text-decoration:none">所有選物</a>
+</footer>
+</body>
+</html>

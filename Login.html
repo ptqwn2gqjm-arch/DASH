@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="登入 Dash，每週第一時間掌握韓國最夯選物——美妝、周邊、潮牌一站看懂。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dash">
+<meta property="og:title" content="Dash — 登入">
+<meta property="og:description" content="登入 Dash，每週第一時間掌握韓國最夯選物——美妝、周邊、潮牌一站看懂。">
+<meta property="og:image" content="https://dash.tw/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dash — 登入">
+<meta name="twitter:description" content="登入 Dash，每週第一時間掌握韓國最夯選物——美妝、周邊、潮牌一站看懂。">
+<title>Dash — 登入</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #0F4C81; --blue-light: #1a6bb5; --text: #111; --muted: #888; --border: #e8e8e8; --red: #e74c3c; --green: #2ecc71; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: #f5f7fa; color: var(--text); display: flex; min-height: 100vh; }
+
+  /* LEFT */
+  .left {
+    width: 45%; background: var(--blue); position: relative;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 48px; overflow: hidden; flex-shrink: 0;
+  }
+  .left::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 80% at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 60%); }
+  .left-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: 0.08em; color: white; text-decoration: none; position: relative; z-index: 1; }
+  .left-logo span { opacity: 0.45; }
+  .left-center { position: relative; z-index: 1; }
+  .left-big { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(60px, 8vw, 100px); color: white; line-height: 1; letter-spacing: 0.02em; margin-bottom: 20px; }
+  .left-big .outline { color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.4); }
+  .left-desc { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.8; font-weight: 300; max-width: 280px; }
+  .left-deco { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(100px, 16vw, 200px); color: rgba(255,255,255,0.04); letter-spacing: 0.06em; position: absolute; bottom: -20px; right: -20px; line-height: 1; pointer-events: none; }
+  .left-bottom { position: relative; z-index: 1; }
+  .left-tagline { font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* RIGHT */
+  .right { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 40px; overflow-y: auto; position: relative; }
+  .back-btn { position: absolute; top: 24px; right: 24px; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); text-decoration: none; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border); background: white; transition: all 0.2s; }
+  .back-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .back-btn svg { width: 14px; height: 14px; }
+
+  .auth-wrap { width: 100%; max-width: 380px; }
+
+  /* TABS */
+  .tabs { display: flex; background: #f0f2f5; border-radius: 10px; padding: 4px; margin-bottom: 32px; gap: 4px; }
+  .tab { flex: 1; padding: 10px; text-align: center; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--muted); }
+  .tab.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* HEADER */
+  .auth-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .auth-title span { color: var(--blue); }
+  .auth-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; font-weight: 300; }
+
+  /* PANEL */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* FORM */
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 12px; font-weight: 500; color: #555; margin-bottom: 7px; letter-spacing: 0.04em; }
+  .field input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'Noto Sans TC', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; color: var(--text); background: white; }
+  .field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(15,76,129,0.08); }
+  .field input.error { border-color: var(--red); }
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 44px; }
+  .pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); transition: color 0.2s; padding: 4px; }
+  .pw-toggle:hover { color: var(--blue); }
+  .pw-toggle svg { width: 16px; height: 16px; display: block; }
+
+  /* STRENGTH */
+  .strength-track { height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .strength-bar { height: 100%; border-radius: 2px; transition: width 0.35s, background 0.35s; width: 0; }
+  .strength-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .check-row { display: flex; align-items: center; gap: 8px; }
+  .check-row input { width: 16px; height: 16px; accent-color: var(--blue); cursor: pointer; }
+  .check-row label { font-size: 13px; color: var(--muted); cursor: pointer; }
+  .forgot-link { font-size: 13px; color: var(--blue); cursor: pointer; text-decoration: none; background: none; border: none; font-family: inherit; }
+  .forgot-link:hover { text-decoration: underline; }
+
+  /* ERROR MSG */
+  .error-msg { background: #fff5f5; border: 1px solid #ffd0d0; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 16px; display: none; }
+  .error-msg.show { display: block; }
+
+  .submit { width: 100%; padding: 14px; background: var(--blue); color: white; border: none; border-radius: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; }
+  .submit:hover { background: var(--blue-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,76,129,0.3); }
+
+  .switch { text-align: center; font-size: 13px; color: var(--muted); margin-top: 18px; }
+  .switch a { color: var(--blue); cursor: pointer; font-weight: 500; text-decoration: none; }
+  .switch a:hover { text-decoration: underline; }
+
+  /* FORGOT */
+  .back-to-login { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue); cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; margin-bottom: 24px; }
+  .back-to-login svg { width: 14px; height: 14px; }
+
+  /* SUCCESS */
+  .success { text-align: center; padding: 20px 0; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+  .success-emoji { font-size: 52px; margin-bottom: 16px; display: block; }
+  .success h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: 0.04em; color: var(--blue); margin-bottom: 10px; }
+  .success p { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    .left { width: 100%; min-height: 200px; padding: 32px; }
+    .left-center { display: none; }
+    .right { padding: 32px 24px; }
+    .back-btn { top: 16px; right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LEFT -->
+<div class="left">
+  <a href="index.html" class="left-logo">DA<span>SH</span></a>
+  <div class="left-center">
+    <div class="left-big">韓迷<br><span class="outline">在買什麼？</span></div>
+    <p class="left-desc">登入 Dash，每週掌握美妝、周邊、潮牌最新選物。</p>
+  </div>
+  <div class="left-bottom">
+    <div class="left-tagline">Korean goods · Direct to Taiwan</div>
+  </div>
+  <div class="left-deco">DASH</div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <a href="index.html" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    回首頁
+  </a>
+
+  <div class="auth-wrap">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('login')">登入</div>
+      <div class="tab" onclick="switchTab('register')">註冊帳號</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="panel active" id="panel-login">
+      <div class="auth-title">歡迎回來 <span>👋</span></div>
+      <div class="auth-sub">輸入帳號和密碼繼續</div>
+      <div class="error-msg" id="login-error">帳號或密碼不正確，請再試一次。</div>
+      <div class="field">
+        <label>帳號</label>
+        <input type="text" id="login-user" placeholder="你的帳號" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="field">
+        <label>密碼</label>
+        <div class="pw-wrap">
+          <input type="password" id="login-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+          <button class="pw-toggle" onclick="togglePw('login-pw')" tabindex="-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="row-between">
+        <div class="check-row">
+          <input type="checkbox" id="remember">
+          <label for="remember">記住我</label>
+        </div>
+        <button class="forgot-link" onclick="switchTab('forgot')">忘記密碼？</button>
+      </div>
+      <button class="submit" onclick="doLogin()">登入</button>
+      <div class="switch">還沒有帳號？<a onclick="switchTab('register')">立即免費註冊</a></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="panel" id="panel-register">
+      <div class="auth-title">加入 <span>Dash</span></div>
+      <div class="auth-sub">建立帳號，開始你的韓貨旅程</div>
+      <div class="error-msg" id="reg-error"></div>
+      <div class="field">
+        <label>暱稱／帳號</label>
+        <input type="text" id="reg-user" placeholder="設定你的帳號名稱">
+      </div>
+      <div class="field">
+        <label>顯示名稱</label>
+        <input type="text" id="reg-name" placeholder="其他人看到的名字">
+      </div>
+      <div class="field">
+        <label>密碼</label>
+        <div class="pw-wrap">
+          <input type="password" id="reg-pw" placeholder="至少 8 個字元" oninput="checkStrength(this.value)">
+          <button class="pw-toggle" onclick="togglePw('reg-pw')" tabindex="-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="strength-track"><div class="strength-bar" id="sw-bar"></div></div>
+        <div class="strength-label" id="sw-label"></div>
+      </div>
+      <div class="field">
+        <label>確認密碼</label>
+        <div class="pw-wrap">
+          <input type="password" id="reg-pw2" placeholder="••••••••">
+          <button class="pw-toggle" onclick="togglePw('reg-pw2')" tabindex="-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="submit" onclick="doRegister()" style="margin-top:8px">建立帳號</button>
+      <div class="switch">已有帳號？<a onclick="switchTab('login')">直接登入</a></div>
+    </div>
+
+    <!-- FORGOT -->
+    <div class="panel" id="panel-forgot">
+      <button class="back-to-login" onclick="switchTab('login')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        回到登入
+      </button>
+      <div class="auth-title">重設<span>密碼</span></div>
+      <div class="auth-sub">輸入你的帳號，我們會協助你重設密碼。</div>
+      <div id="forgot-form">
+        <div class="field">
+          <label>帳號</label>
+          <input type="text" id="forgot-user" placeholder="你的帳號">
+        </div>
+        <button class="submit" onclick="doForgot()">確認重設</button>
+      </div>
+      <div class="success" id="forgot-ok" style="display:none">
+        <span class="success-emoji">🔐</span>
+        <h3>已送出申請</h3>
+        <p>請聯絡管理員重設你的密碼。</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── ACCOUNTS DB ──
+const ADMIN = { username: 'dash_admin', password: 'Dash2026!', name: 'Dash 管理員', isAdmin: true };
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem('dash_users') || '[]'); } catch { return []; }
+}
+function saveUsers(users) { localStorage.setItem('dash_users', JSON.stringify(users)); }
+
+// Init admin if not exists
+(function() {
+  const users = getUsers();
+  if (!users.find(u => u.username === ADMIN.username)) {
+    users.push(ADMIN); saveUsers(users);
+  }
+  // If already logged in, go to profile
+  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
+  if (session) window.location.href = 'profile.html';
+})();
+
+// ── UI ──
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (id === 'login') document.querySelectorAll('.tab')[0].classList.add('active');
+  if (id === 'register') document.querySelectorAll('.tab')[1].classList.add('active');
+}
+
+function togglePw(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function checkStrength(pw) {
+  const bar = document.getElementById('sw-bar'), label = document.getElementById('sw-label');
+  if (!pw) { bar.style.width='0'; label.textContent=''; return; }
+  let s = 0;
+  if (pw.length >= 8) s++;
+  if (/[A-Z]/.test(pw)) s++;
+  if (/[0-9]/.test(pw)) s++;
+  if (/[^A-Za-z0-9]/.test(pw)) s++;
+  const lv = [{w:'25%',bg:'#e74c3c',t:'太弱'},{w:'50%',bg:'#f39c12',t:'普通'},{w:'75%',bg:'#3498db',t:'強'},{w:'100%',bg:'#2ecc71',t:'非常強'}][Math.max(s-1,0)];
+  bar.style.width=lv.w; bar.style.background=lv.bg; label.textContent='強度：'+lv.t;
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── LOGIN ──
+function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pw').value;
+  if (!username || !password) { showError('login-error', '請填寫帳號和密碼。'); return; }
+
+  const users = getUsers();
+  const user = users.find(u => u.username === username && u.password === password);
+  if (!user) { showError('login-error', '帳號或密碼不正確，請再試一次。'); return; }
+
+  // Save session
+  localStorage.setItem('dash_session', JSON.stringify({ username: user.username, name: user.name, isAdmin: user.isAdmin || false }));
+  localStorage.setItem('dash_user', JSON.stringify({ name: user.name, username: user.username, isAdmin: user.isAdmin || false }));
+
+  window.location.href = 'profile.html';
+}
+
+// ── REGISTER ──
+function doRegister() {
+  const username = document.getElementById('reg-user').value.trim();
+  const name     = document.getElementById('reg-name').value.trim();
+  const pw       = document.getElementById('reg-pw').value;
+  const pw2      = document.getElementById('reg-pw2').value;
+
+  if (!username || !name || !pw || !pw2) { showError('reg-error', '請填寫所有欄位。'); return; }
+  if (pw.length < 8) { showError('reg-error', '密碼至少需要 8 個字元。'); return; }
+  if (pw !== pw2) { showError('reg-error', '兩次密碼不一致。'); return; }
+
+  const users = getUsers();
+  if (users.find(u => u.username === username)) { showError('reg-error', '這個帳號已被使用，請換一個。'); return; }
+
+  const newUser = { username, name, password: pw, isAdmin: false };
+  users.push(newUser); saveUsers(users);
+
+  localStorage.setItem('dash_session', JSON.stringify({ username, name, isAdmin: false }));
+  localStorage.setItem('dash_user', JSON.stringify({ name, username, isAdmin: false }));
+  window.location.href = 'profile.html';
+}
+
+// ── FORGOT ──
+function doForgot() {
+  const u = document.getElementById('forgot-user').value.trim();
+  if (!u) { alert('請輸入帳號。'); return; }
+  document.getElementById('forgot-form').style.display = 'none';
+  document.getElementById('forgot-ok').style.display = 'block';
+}
+</script>
+<footer style="padding:20px 32px;border-top:1px solid #e8e8e8;background:white;text-align:center;font-size:12px;color:#888">
+  © 2026 Dash · <a href="about.html" style="color:#0F4C81;text-decoration:none">關於我們</a> · <a href="picks.html" style="color:#0F4C81;text-decoration:none">所有選物</a>
+</footer>
+</body>
+</html>

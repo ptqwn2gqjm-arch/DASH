@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dash — 文章</title>
+<meta name="description" content="Dash 精選韓國好物介紹，教你怎麼從 Weverse Shop、Olive Young、Musinsa 買到台灣。">
+<meta property="og:site_name" content="Dash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dash — 文章">
+<meta property="og:description" content="Dash 精選韓國好物介紹，教你怎麼從韓國買到台灣。">
+<meta property="og:image" content="">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #0F4C81; --blue-light: #1a6bb5; --text: #111; --muted: #888; --border: #e8e8e8; --bg: #f5f7fa; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); background: #fff; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; gap: 16px; z-index: 100; }
+  .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: 0.08em; text-decoration: none; flex-shrink: 0; }
+  .nav-logo .da { color: var(--blue); }
+  .nav-logo .sh { color: var(--text); }
+  .nav-search { flex: 1; max-width: 360px; position: relative; display: flex; align-items: center; margin: 0 auto; }
+  .nav-search input { width: 100%; padding: 8px 16px 8px 38px; border: 1.5px solid var(--border); border-radius: 20px; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; outline: none; transition: all 0.3s; background: #f5f7fa; }
+  .nav-search input:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(15,76,129,0.08); }
+  .search-icon { position: absolute; left: 13px; width: 15px; height: 15px; color: var(--muted); pointer-events: none; }
+  .nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+  .nav-links a { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 14px; text-decoration: none; color: var(--muted); border-radius: 8px; transition: all 0.2s; font-size: 10px; letter-spacing: 0.05em; }
+  .nav-links a:hover { background: #f0f5ff; color: var(--blue); }
+  .nav-links a svg { width: 18px; height: 18px; stroke-width: 1.8; }
+  .nav-login { background: var(--blue) !important; color: white !important; }
+  .nav-login:hover { background: var(--blue-light) !important; }
+  .bookmark-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px; background: white; font-size: 12px; cursor: pointer; color: var(--muted); transition: all 0.2s; font-family: 'Noto Sans TC', sans-serif; }
+  .bookmark-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .bookmark-btn svg { width: 15px; height: 15px; }
+  .back-btn { font-size: 12px; color: var(--blue); text-decoration: none; display: flex; align-items: center; gap: 4px; padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px; transition: all 0.2s; white-space: nowrap; }
+  .back-btn:hover { border-color: var(--blue); background: #f0f5ff; }
+  .back-btn svg { width: 14px; height: 14px; }
+
+  /* ARTICLE */
+  .article-wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 80px; }
+
+  .article-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .platform { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: white; background: var(--blue); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .date { font-size: 12px; color: var(--muted); }
+
+  .article-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 54px); line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 20px; }
+  .article-desc { font-size: 17px; color: var(--muted); line-height: 1.75; font-weight: 300; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .article-cover { width: 100%; aspect-ratio: 16/9; background: #f0f4f8; border-radius: 12px; margin-bottom: 36px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; }
+  .article-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .article-body { font-size: 16px; line-height: 2; color: #333; font-weight: 300; margin-bottom: 48px; }
+  .article-body p { margin-bottom: 20px; }
+
+  /* CTA */
+  .article-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--blue); color: white; padding: 14px 28px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.1em; text-decoration: none; transition: all 0.2s; margin-bottom: 48px; }
+  .article-cta:hover { background: var(--blue-light); transform: translateY(-2px); }
+  .article-cta svg { width: 16px; height: 16px; }
+
+  /* SHARE */
+  .share-bar { display: flex; align-items: center; gap: 10px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .share-label { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-right: 4px; }
+  .share-btn { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 12px; cursor: pointer; transition: all 0.2s; background: white; font-family: 'Noto Sans TC', sans-serif; text-decoration: none; color: var(--text); }
+  .share-btn:hover { transform: translateY(-1px); }
+  .share-btn.line { border-color: #06c755; color: #06c755; }
+  .share-btn.line:hover { background: #f0fff4; }
+  .share-btn.copy:hover { border-color: var(--blue); color: var(--blue); background: #f0f5ff; }
+  .share-btn svg { width: 15px; height: 15px; }
+  .copy-success { font-size: 11px; color: var(--blue); margin-left: 4px; opacity: 0; transition: opacity 0.3s; }
+  .copy-success.show { opacity: 1; }
+
+  /* RELATED */
+  .related { margin-bottom: 60px; }
+  .related-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: 0.04em; margin-bottom: 20px; }
+  .related-title span { color: var(--blue); }
+  .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .related-card { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: flex; transition: all 0.2s; }
+  .related-card:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(15,76,129,0.08); }
+  .related-img { width: 80px; height: 80px; background: #f0f4f8; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--muted); }
+  .related-img img { width: 100%; height: 100%; object-fit: cover; }
+  .related-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .related-platform { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: white; background: var(--blue); padding: 2px 6px; border-radius: 10px; font-weight: 500; display: inline-block; margin-bottom: 5px; }
+  .related-name { font-size: 13px; font-weight: 500; line-height: 1.4; }
+
+  /* COMMENTS */
+  .comments { border-top: 1px solid var(--border); padding-top: 48px; }
+  .comments-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: 0.04em; margin-bottom: 28px; }
+  .comments-title span { color: var(--blue); }
+  .comment-form { margin-bottom: 40px; background: var(--bg); border-radius: 10px; padding: 20px; }
+  .comment-form input, .comment-form textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 11px 14px; font-family: 'Noto Sans TC', sans-serif; font-size: 14px; margin-bottom: 10px; outline: none; transition: border-color 0.2s; resize: none; background: white; }
+  .comment-form input:focus, .comment-form textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(15,76,129,0.08); }
+  .comment-form textarea { height: 90px; }
+  .comment-form button { background: var(--blue); color: white; border: none; padding: 11px 24px; border-radius: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; }
+  .comment-form button:hover { background: var(--blue-light); }
+  .comment-list { display: flex; flex-direction: column; gap: 16px; }
+  .comment { padding: 18px 20px; border: 1.5px solid var(--border); border-radius: 10px; }
+  .comment-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .comment-name { font-size: 14px; font-weight: 500; }
+  .comment-date { font-size: 11px; color: var(--muted); }
+  .comment-text { font-size: 14px; line-height: 1.7; color: #444; font-weight: 300; }
+  .comment-reply { margin-top: 12px; background: #f0f5ff; padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--blue); }
+  .comment-reply-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); font-weight: 500; margin-bottom: 4px; display: block; }
+  .comment-reply-text { font-size: 13px; color: var(--blue); line-height: 1.6; }
+  .no-comments { font-size: 14px; color: var(--muted); text-align: center; padding: 32px 0; }
+
+  /* FOOTER */
+  footer { background: var(--bg); border-top: 1px solid var(--border); padding: 32px 40px; }
+  .footer-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 0.08em; text-decoration: none; }
+  .footer-logo .da { color: var(--blue); }
+  .footer-logo .sh { color: var(--text); }
+  .footer-copy { font-size: 12px; color: var(--muted); }
+
+  /* LOADING */
+  #loading { text-align: center; padding: 100px 24px; color: var(--muted); font-size: 14px; }
+  #error-msg { text-align: center; padding: 100px 24px; }
+  #error-msg h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+  #error-msg a { color: var(--blue); font-size: 14px; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; gap: 8px; }
+    .nav-search { max-width: 160px; }
+    .back-btn span { display: none; }
+    .article-wrap { padding: 40px 16px 60px; }
+    .related-grid { grid-template-columns: 1fr; }
+    .share-bar { flex-wrap: wrap; }
+    footer { padding: 24px 16px; }
+    .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 480px) {
+    .bookmark-btn span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="da">DA</span><span class="sh">SH</span></a>
+  <div class="nav-search">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="搜尋文章⋯" onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='picks.html?q='+encodeURIComponent(this.value.trim())">
+  </div>
+  <div class="nav-right">
+    <button class="bookmark-btn" id="bookmark-btn" onclick="toggleBookmark()">
+      <svg id="bookmark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <span id="bookmark-label">收藏</span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="picks.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>選物</a></li>
+      <li><a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>關於</a></li>
+      <li><a href="login.html" class="nav-login"><svg viewBox="0 0 24 24" fill="none" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>登入</a></li>
+    </ul>
+    <a href="picks.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span>回選物</span>
+    </a>
+  </div>
+</nav>
+
+<div id="loading">載入中⋯</div>
+<div id="error-msg" style="display:none">
+  <h2>找不到這篇文章</h2>
+  <p style="color:var(--muted);margin-bottom:16px;font-size:14px">文章可能已移除或連結有誤。</p>
+  <a href="picks.html">← 回到所有選物</a>
+</div>
+
+<div id="article-content" style="display:none">
+  <div class="article-wrap">
+    <div class="article-meta">
+      <span class="platform" id="a-platform"></span>
+      <span class="date" id="a-date"></span>
+    </div>
+    <h1 class="article-title" id="a-title"></h1>
+    <p class="article-desc" id="a-desc"></p>
+    <div class="article-cover" id="a-cover"></div>
+    <div class="article-body" id="a-body"></div>
+    <a href="#" class="article-cta" id="a-link" target="_blank" rel="noopener">
+      <span id="a-link-label">前往購買</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+
+    <!-- SHARE -->
+    <div class="share-bar">
+      <span class="share-label">分享</span>
+      <a class="share-btn line" id="share-line" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        LINE
+      </a>
+      <button class="share-btn copy" onclick="copyLink()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        複製連結
+      </button>
+      <span class="copy-success" id="copy-ok">✓ 已複製</span>
+    </div>
+
+    <!-- RELATED -->
+    <div class="related" id="related-section">
+      <div class="related-title">更多<span>選物</span></div>
+      <div class="related-grid" id="related-grid"></div>
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="comments">
+      <div class="comments-title">留言 <span id="comment-count"></span></div>
+      <div class="comment-form">
+        <input type="text" id="c-name" placeholder="你的名字（必填）" maxlength="20">
+        <textarea id="c-text" placeholder="有問題或想法？留言給我們⋯"></textarea>
+        <button onclick="submitComment()">送出留言</button>
+      </div>
+      <div class="comment-list" id="comment-list">
+        <div class="no-comments">還沒有留言，來說說你的看法！</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo"><span class="da">DA</span><span class="sh">SH</span></a>
+    <div class="footer-copy">© 2026 Dash. 韓迷做給韓迷的選物平台。</div>
+  </div>
+</footer>
+
+<script>
+const params    = new URLSearchParams(location.search);
+const articleId = params.get('id');
+
+// ── LOAD ARTICLE ──
+(function() {
+  if (!articleId) { showError(); return; }
+  try {
+    const articles = JSON.parse(localStorage.getItem('dash_articles') || '[]');
+    const a = articles.find(x => x.id === articleId);
+    if (!a) { showError(); return; }
+
+    // Update SEO
+    document.title = `Dash — ${a.title}`;
+    document.querySelector('meta[property="og:title"]').content     = `Dash — ${a.title}`;
+    document.querySelector('meta[property="og:description"]').content = a.desc;
+    if (a.cover) document.querySelector('meta[property="og:image"]').content = a.cover;
+
+    document.getElementById('a-platform').textContent   = a.platform;
+    document.getElementById('a-date').textContent       = a.date;
+    document.getElementById('a-title').textContent      = a.title;
+    document.getElementById('a-desc').textContent       = a.desc;
+    document.getElementById('a-body').innerHTML         = a.content ? a.content.split('\n').map(l => l ? `<p>${l}</p>` : '').join('') : '';
+    document.getElementById('a-link').href              = a.link || '#';
+    document.getElementById('a-link-label').textContent = a.linkLabel || '前往購買';
+    if (!a.link) document.querySelector('.article-cta').style.display = 'none';
+
+    const cover = document.getElementById('a-cover');
+    if (a.cover) cover.innerHTML = `<img src="${a.cover}" alt="${a.title}">`;
+    else cover.textContent = '商品圖片';
+
+    // Share LINE
+    document.getElementById('share-line').href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}`;
+
+    document.getElementById('loading').style.display       = 'none';
+    document.getElementById('article-content').style.display = 'block';
+
+    updateBookmarkBtn(articleId);
+    renderRelated(articles, articleId, a.platform);
+    renderComments();
+  } catch(e) { showError(); }
+})();
+
+function showError() {
+  document.getElementById('loading').style.display  = 'none';
+  document.getElementById('error-msg').style.display = 'block';
+}
+
+// ── RELATED ──
+function renderRelated(articles, currentId, platform) {
+  const others = articles.filter(a => a.id !== currentId);
+  const same   = others.filter(a => a.platform === platform).slice(0, 2);
+  const diff   = others.filter(a => a.platform !== platform).slice(0, 2 - same.length);
+  const picks  = [...same, ...diff].slice(0, 2);
+  const grid   = document.getElementById('related-grid');
+  if (!picks.length) { document.getElementById('related-section').style.display = 'none'; return; }
+  grid.innerHTML = picks.map(a => `
+    <a class="related-card" href="article.html?id=${a.id}">
+      <div class="related-img">${a.cover ? `<img src="${a.cover}" alt="${a.title}">` : '圖片'}</div>
+      <div class="related-body">
+        <span class="related-platform">${a.platform}</span>
+        <div class="related-name">${a.title}</div>
+      </div>
+    </a>`).join('');
+}
+
+// ── SHARE ──
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(() => {
+    const ok = document.getElementById('copy-ok');
+    ok.classList.add('show');
+    setTimeout(() => ok.classList.remove('show'), 2000);
+  });
+}
+
+// ── BOOKMARK ──
+function updateBookmarkBtn(id) {
+  const bookmarks = JSON.parse(localStorage.getItem('dash_bookmarks') || '[]');
+  const saved  = bookmarks.includes(id);
+  const btn    = document.getElementById('bookmark-btn');
+  const icon   = document.getElementById('bookmark-icon');
+  const label  = document.getElementById('bookmark-label');
+  btn.style.borderColor = saved ? 'var(--blue)' : 'var(--border)';
+  btn.style.color       = saved ? 'var(--blue)' : 'var(--muted)';
+  icon.setAttribute('fill', saved ? '#0F4C81' : 'none');
+  label.textContent = saved ? '已收藏' : '收藏';
+}
+
+function toggleBookmark() {
+  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
+  if (!session) { if (confirm('請先登入才能收藏，前往登入頁面？')) window.location.href = 'login.html'; return; }
+  if (!articleId) return;
+  const bookmarks = JSON.parse(localStorage.getItem('dash_bookmarks') || '[]');
+  const idx = bookmarks.indexOf(articleId);
+  if (idx === -1) bookmarks.push(articleId); else bookmarks.splice(idx, 1);
+  localStorage.setItem('dash_bookmarks', JSON.stringify(bookmarks));
+  updateBookmarkBtn(articleId);
+}
+
+// ── COMMENTS ──
+function getComments() { try { return JSON.parse(localStorage.getItem('comments_' + articleId) || '[]'); } catch { return []; } }
+function saveComments(arr) { localStorage.setItem('comments_' + articleId, JSON.stringify(arr)); }
+
+function renderComments() {
+  const list     = document.getElementById('comment-list');
+  const comments = getComments();
+  const count    = document.getElementById('comment-count');
+  count.textContent = comments.length ? `(${comments.length})` : '';
+  if (!comments.length) { list.innerHTML = '<div class="no-comments">還沒有留言，來說說你的看法！</div>'; return; }
+  list.innerHTML = comments.map(c => `
+    <div class="comment">
+      <div class="comment-header"><span class="comment-name">${c.name}</span><span class="comment-date">${c.date}</span></div>
+      <div class="comment-text">${c.text}</div>
+      ${c.reply ? `<div class="comment-reply"><span class="comment-reply-label">Dash 回覆</span><div class="comment-reply-text">${c.reply}</div></div>` : ''}
+    </div>`).join('');
+}
+
+function submitComment() {
+  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
+  const nameInput = document.getElementById('c-name');
+  const textInput = document.getElementById('c-text');
+  const name = session ? session.name : nameInput.value.trim();
+  const text = textInput.value.trim();
+  if (!name) { alert('請填寫名字。'); return; }
+  if (!text) { alert('請填寫留言內容。'); return; }
+  const comments = getComments();
+  comments.unshift({ name, text, date: new Date().toLocaleDateString('zh-TW') });
+  saveComments(comments);
+  nameInput.value = ''; textInput.value = '';
+  renderComments();
+}
+
+// Auto-fill name if logged in
+(function() {
+  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
+  if (session) {
+    const nameInput = document.getElementById('c-name');
+    nameInput.value    = session.name;
+    nameInput.readOnly = true;
+    nameInput.style.background = 'var(--bg)';
+    nameInput.style.color      = 'var(--muted)';
+  }
+
+  // Update nav
+  const loginBtn = document.querySelector('.nav-login');
+  if (loginBtn && session) {
+    loginBtn.href = 'profile.html';
+    loginBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">我的</span>';
+  }
+})();
+</script>
+</body>
+</html>
