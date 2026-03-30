@@ -85,12 +85,15 @@
   .forgot-link { font-size: 13px; color: var(--blue); cursor: pointer; text-decoration: none; background: none; border: none; font-family: inherit; }
   .forgot-link:hover { text-decoration: underline; }
 
-  /* ERROR MSG */
+  /* ERROR / SUCCESS MSG */
   .error-msg { background: #fff5f5; border: 1px solid #ffd0d0; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 16px; display: none; }
   .error-msg.show { display: block; }
+  .success-msg { background: #f0fff4; border: 1px solid #b2f5c8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #27ae60; margin-bottom: 16px; display: none; }
+  .success-msg.show { display: block; }
 
-  .submit { width: 100%; padding: 14px; background: var(--blue); color: white; border: none; border-radius: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; }
-  .submit:hover { background: var(--blue-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,76,129,0.3); }
+  .submit { width: 100%; padding: 14px; background: var(--blue); color: white; border: none; border-radius: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; position: relative; }
+  .submit:hover:not(:disabled) { background: var(--blue-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,76,129,0.3); }
+  .submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
   .switch { text-align: center; font-size: 13px; color: var(--muted); margin-top: 18px; }
   .switch a { color: var(--blue); cursor: pointer; font-weight: 500; text-decoration: none; }
@@ -147,11 +150,11 @@
     <!-- LOGIN -->
     <div class="panel active" id="panel-login">
       <div class="auth-title">歡迎回來 <span>👋</span></div>
-      <div class="auth-sub">輸入帳號和密碼繼續</div>
-      <div class="error-msg" id="login-error">帳號或密碼不正確，請再試一次。</div>
+      <div class="auth-sub">輸入 Email 和密碼繼續</div>
+      <div class="error-msg" id="login-error"></div>
       <div class="field">
-        <label>帳號</label>
-        <input type="text" id="login-user" placeholder="你的帳號" onkeydown="if(event.key==='Enter')doLogin()">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <div class="field">
         <label>密碼</label>
@@ -169,7 +172,7 @@
         </div>
         <button class="forgot-link" onclick="switchTab('forgot')">忘記密碼？</button>
       </div>
-      <button class="submit" onclick="doLogin()">登入</button>
+      <button class="submit" id="login-btn" onclick="doLogin()">登入</button>
       <div class="switch">還沒有帳號？<a onclick="switchTab('register')">立即免費註冊</a></div>
     </div>
 
@@ -178,13 +181,18 @@
       <div class="auth-title">加入 <span>Dash</span></div>
       <div class="auth-sub">建立帳號，開始你的韓貨旅程</div>
       <div class="error-msg" id="reg-error"></div>
+      <div class="success-msg" id="reg-success"></div>
       <div class="field">
         <label>暱稱／帳號</label>
-        <input type="text" id="reg-user" placeholder="設定你的帳號名稱">
+        <input type="text" id="reg-user" placeholder="設定你的帳號名稱（英數字）">
       </div>
       <div class="field">
         <label>顯示名稱</label>
         <input type="text" id="reg-name" placeholder="其他人看到的名字">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="reg-email" placeholder="your@email.com">
       </div>
       <div class="field">
         <label>密碼</label>
@@ -206,7 +214,7 @@
           </button>
         </div>
       </div>
-      <button class="submit" onclick="doRegister()" style="margin-top:8px">建立帳號</button>
+      <button class="submit" id="reg-btn" onclick="doRegister()" style="margin-top:8px">建立帳號</button>
       <div class="switch">已有帳號？<a onclick="switchTab('login')">直接登入</a></div>
     </div>
 
@@ -217,45 +225,43 @@
         回到登入
       </button>
       <div class="auth-title">重設<span>密碼</span></div>
-      <div class="auth-sub">輸入你的帳號，我們會協助你重設密碼。</div>
+      <div class="auth-sub">輸入你的 Email，我們會寄送重設連結給你。</div>
       <div id="forgot-form">
         <div class="field">
-          <label>帳號</label>
-          <input type="text" id="forgot-user" placeholder="你的帳號">
+          <label>Email</label>
+          <input type="email" id="forgot-email" placeholder="your@email.com">
         </div>
-        <button class="submit" onclick="doForgot()">確認重設</button>
+        <button class="submit" id="forgot-btn" onclick="doForgot()">寄送重設連結</button>
       </div>
       <div class="success" id="forgot-ok" style="display:none">
         <span class="success-emoji">🔐</span>
-        <h3>已送出申請</h3>
-        <p>請聯絡管理員重設你的密碼。</p>
+        <h3>已寄出！</h3>
+        <p>請檢查你的 Email，點擊連結重設密碼。</p>
       </div>
     </div>
 
   </div>
 </div>
 
+<footer style="padding:20px 32px;border-top:1px solid #e8e8e8;background:white;text-align:center;font-size:12px;color:#888">
+  © 2026 Dash · <a href="about.html" style="color:#0F4C81;text-decoration:none">關於我們</a> · <a href="picks.html" style="color:#0F4C81;text-decoration:none">所有選物</a>
+</footer>
+
 <script>
-// ── ACCOUNTS DB ──
-const ADMIN = { username: 'dash_admin', password: 'Dash2026!', name: 'Dash 管理員', isAdmin: true };
+// ── SUPABASE INIT ──
+const { createClient } = window.supabase;
+const db = createClient(
+  'https://ebxixctntvpfzhgvbvbn.supabase.co',
+  'sb_publishable_ra5tuKIAAStLvHZE-7dZLQ_XuXobLVm'
+);
 
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem('dash_users') || '[]'); } catch { return []; }
-}
-function saveUsers(users) { localStorage.setItem('dash_users', JSON.stringify(users)); }
-
-// Init admin if not exists
-(function() {
-  const users = getUsers();
-  if (!users.find(u => u.username === ADMIN.username)) {
-    users.push(ADMIN); saveUsers(users);
-  }
-  // If already logged in, go to profile
-  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
+// ── CHECK SESSION ──
+(async () => {
+  const { data: { session } } = await db.auth.getSession();
   if (session) window.location.href = 'profile.html';
 })();
 
-// ── UI ──
+// ── UI HELPERS ──
 function switchTab(id) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -271,71 +277,103 @@ function togglePw(id) {
 
 function checkStrength(pw) {
   const bar = document.getElementById('sw-bar'), label = document.getElementById('sw-label');
-  if (!pw) { bar.style.width='0'; label.textContent=''; return; }
+  if (!pw) { bar.style.width = '0'; label.textContent = ''; return; }
   let s = 0;
   if (pw.length >= 8) s++;
   if (/[A-Z]/.test(pw)) s++;
   if (/[0-9]/.test(pw)) s++;
   if (/[^A-Za-z0-9]/.test(pw)) s++;
-  const lv = [{w:'25%',bg:'#e74c3c',t:'太弱'},{w:'50%',bg:'#f39c12',t:'普通'},{w:'75%',bg:'#3498db',t:'強'},{w:'100%',bg:'#2ecc71',t:'非常強'}][Math.max(s-1,0)];
-  bar.style.width=lv.w; bar.style.background=lv.bg; label.textContent='強度：'+lv.t;
+  const lv = [
+    { w: '25%', bg: '#e74c3c', t: '太弱' },
+    { w: '50%', bg: '#f39c12', t: '普通' },
+    { w: '75%', bg: '#3498db', t: '強' },
+    { w: '100%', bg: '#2ecc71', t: '非常強' }
+  ][Math.max(s - 1, 0)];
+  bar.style.width = lv.w; bar.style.background = lv.bg;
+  label.textContent = '強度：' + lv.t;
 }
 
 function showError(id, msg) {
   const el = document.getElementById(id);
   el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3000);
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+function showSuccess(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  if (loading) btn.dataset.orig = btn.textContent;
+  btn.textContent = loading ? '處理中…' : btn.dataset.orig;
 }
 
 // ── LOGIN ──
-function doLogin() {
-  const username = document.getElementById('login-user').value.trim();
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-pw').value;
-  if (!username || !password) { showError('login-error', '請填寫帳號和密碼。'); return; }
+  if (!email || !password) { showError('login-error', '請填寫 Email 和密碼。'); return; }
 
-  const users = getUsers();
-  const user = users.find(u => u.username === username && u.password === password);
-  if (!user) { showError('login-error', '帳號或密碼不正確，請再試一次。'); return; }
+  setLoading('login-btn', true);
+  const { error } = await db.auth.signInWithPassword({ email, password });
+  setLoading('login-btn', false);
 
-  // Save session
-  localStorage.setItem('dash_session', JSON.stringify({ username: user.username, name: user.name, isAdmin: user.isAdmin || false }));
-  localStorage.setItem('dash_user', JSON.stringify({ name: user.name, username: user.username, isAdmin: user.isAdmin || false }));
-
+  if (error) {
+    showError('login-error', '帳號或密碼不正確，請再試一次。');
+    return;
+  }
   window.location.href = 'profile.html';
 }
 
 // ── REGISTER ──
-function doRegister() {
+async function doRegister() {
   const username = document.getElementById('reg-user').value.trim();
   const name     = document.getElementById('reg-name').value.trim();
+  const email    = document.getElementById('reg-email').value.trim();
   const pw       = document.getElementById('reg-pw').value;
   const pw2      = document.getElementById('reg-pw2').value;
 
-  if (!username || !name || !pw || !pw2) { showError('reg-error', '請填寫所有欄位。'); return; }
+  if (!username || !name || !email || !pw || !pw2) { showError('reg-error', '請填寫所有欄位。'); return; }
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) { showError('reg-error', '帳號只能使用英文、數字和底線。'); return; }
   if (pw.length < 8) { showError('reg-error', '密碼至少需要 8 個字元。'); return; }
   if (pw !== pw2) { showError('reg-error', '兩次密碼不一致。'); return; }
 
-  const users = getUsers();
-  if (users.find(u => u.username === username)) { showError('reg-error', '這個帳號已被使用，請換一個。'); return; }
+  setLoading('reg-btn', true);
+  const { error } = await db.auth.signUp({
+    email,
+    password: pw,
+    options: {
+      data: { username, display_name: name }
+    }
+  });
+  setLoading('reg-btn', false);
 
-  const newUser = { username, name, password: pw, isAdmin: false };
-  users.push(newUser); saveUsers(users);
+  if (error) {
+    showError('reg-error', error.message === 'User already registered' ? '這個 Email 已被註冊。' : '註冊失敗：' + error.message);
+    return;
+  }
 
-  localStorage.setItem('dash_session', JSON.stringify({ username, name, isAdmin: false }));
-  localStorage.setItem('dash_user', JSON.stringify({ name, username, isAdmin: false }));
-  window.location.href = 'profile.html';
+  showSuccess('reg-success', '✅ 註冊成功！請檢查 Email 完成驗證後再登入。');
+  setTimeout(() => switchTab('login'), 3000);
 }
 
 // ── FORGOT ──
-function doForgot() {
-  const u = document.getElementById('forgot-user').value.trim();
-  if (!u) { alert('請輸入帳號。'); return; }
+async function doForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  if (!email) { alert('請輸入 Email。'); return; }
+
+  setLoading('forgot-btn', true);
+  await db.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/login.html'
+  });
+  setLoading('forgot-btn', false);
+
   document.getElementById('forgot-form').style.display = 'none';
   document.getElementById('forgot-ok').style.display = 'block';
 }
 </script>
-<footer style="padding:20px 32px;border-top:1px solid #e8e8e8;background:white;text-align:center;font-size:12px;color:#888">
-  © 2026 Dash · <a href="about.html" style="color:#0F4C81;text-decoration:none">關於我們</a> · <a href="picks.html" style="color:#0F4C81;text-decoration:none">所有選物</a>
-</footer>
 </body>
 </html>
