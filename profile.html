@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -38,7 +37,6 @@
 
   .layout { display: grid; grid-template-columns: 260px 1fr; gap: 28px; max-width: 1100px; margin: 0 auto; padding: 40px 32px; }
 
-  /* SIDEBAR */
   .sidebar { position: sticky; top: 88px; height: fit-content; }
   .profile-card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 28px 24px; text-align: center; margin-bottom: 12px; }
   .avatar-wrap { position: relative; display: inline-block; margin-bottom: 16px; cursor: pointer; }
@@ -61,7 +59,6 @@
   .side-item svg { width: 16px; height: 16px; flex-shrink: 0; }
   .side-divider { height: 1px; background: var(--border); }
 
-  /* MAIN */
   .main-content { min-width: 0; }
   .section { display: none; }
   .section.active { display: block; }
@@ -93,14 +90,12 @@
   .btn-outline:hover { background: #f0f5ff; }
   .btn-sm { font-size: 12px; padding: 7px 14px; }
 
-  /* ADMIN CARD */
   .admin-card { background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%); border-radius: 12px; padding: 28px 32px; margin-bottom: 20px; color: white; }
   .admin-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: 0.04em; margin-bottom: 8px; }
   .admin-card p { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 20px; font-weight: 300; line-height: 1.6; }
   .admin-card a { display: inline-flex; align-items: center; gap: 8px; background: white; color: var(--blue); padding: 12px 24px; border-radius: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; transition: all 0.2s; }
   .admin-card a:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 
-  /* TOGGLE */
   .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
   .toggle-row:last-child { border-bottom: none; }
   .toggle-info h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
@@ -112,7 +107,6 @@
   .toggle-track::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
   .toggle input:checked + .toggle-track::before { transform: translateX(20px); }
 
-  /* LINK ROW */
   .link-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
   .link-row:last-child { border-bottom: none; }
   .link-info { display: flex; align-items: center; gap: 12px; }
@@ -121,7 +115,6 @@
   .link-status { font-size: 12px; color: var(--muted); }
   .link-status.on { color: var(--green); }
 
-  /* BOOKMARKS */
   .bookmark-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
   .bookmark-card { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: all 0.2s; }
   .bookmark-card:hover { border-color: var(--blue); transform: translateY(-2px); }
@@ -131,7 +124,6 @@
   .bookmark-platform { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: white; background: var(--blue); padding: 2px 7px; border-radius: 20px; font-weight: 500; display: inline-block; margin-bottom: 5px; }
   .bookmark-title { font-size: 12px; font-weight: 500; line-height: 1.4; }
 
-  /* COMMENT */
   .comment-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
   .comment-item:last-child { border-bottom: none; }
   .comment-article { font-size: 11px; color: var(--blue); margin-bottom: 5px; text-decoration: none; display: block; }
@@ -140,7 +132,6 @@
   .comment-reply-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
   .comment-date { font-size: 11px; color: var(--muted); }
 
-  .customs-note { background: #f0f5ff; border-left: 3px solid var(--blue); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--blue); margin-bottom: 20px; line-height: 1.6; }
   .empty { text-align: center; padding: 48px; color: var(--muted); font-size: 14px; }
 
   #toast { position: fixed; bottom: 28px; right: 28px; color: white; padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; opacity: 0; transform: translateY(8px); transition: all 0.3s; pointer-events: none; z-index: 999; background: var(--green); }
@@ -171,7 +162,6 @@
 </nav>
 
 <div class="layout">
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="profile-card">
       <div class="avatar-wrap" onclick="document.getElementById('avatar-input').click()">
@@ -219,10 +209,8 @@
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main-content">
 
-    <!-- PROFILE -->
     <div class="section active" id="section-profile">
       <div class="card">
         <div class="card-title">基本資料</div>
@@ -236,27 +224,24 @@
       </div>
     </div>
 
-    <!-- PASSWORD -->
     <div class="section" id="section-password">
       <div class="card">
         <div class="card-title">修改密碼</div>
-        <div class="field"><label>目前密碼</label><div class="pw-wrap"><input type="password" id="pw-cur"><button class="pw-toggle" onclick="togglePw('pw-cur')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
         <div class="field"><label>新密碼</label><div class="pw-wrap"><input type="password" id="pw-new" oninput="checkStr(this.value)"><button class="pw-toggle" onclick="togglePw('pw-new')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div><div class="strength-track"><div class="strength-bar" id="str-bar"></div></div></div>
         <div class="field"><label>確認新密碼</label><div class="pw-wrap"><input type="password" id="pw-cfm"><button class="pw-toggle" onclick="togglePw('pw-cfm')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
         <button class="btn btn-primary" onclick="savePw()">更新密碼</button>
       </div>
     </div>
 
-    <!-- ACCOUNTS -->
     <div class="section" id="section-accounts">
       <div class="card">
         <div class="card-title">帳號連結</div>
         <div class="link-row">
           <div class="link-info">
             <div class="link-icon" style="background:#fff3f2"><svg viewBox="0 0 24 24" style="width:20px;height:20px"><path fill="#ea4335" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
-            <div><div class="link-name">Google</div><div class="link-status on">已連結</div></div>
+            <div><div class="link-name">Google</div><div class="link-status">未連結</div></div>
           </div>
-          <button class="btn btn-secondary btn-sm" onclick="toast('解除連結功能需要串接後端。')">解除連結</button>
+          <button class="btn btn-outline btn-sm" onclick="toast('連結 Google 功能需要在 Supabase 啟用 OAuth。')">連結帳號</button>
         </div>
         <div class="link-row">
           <div class="link-info">
@@ -273,7 +258,6 @@
       </div>
     </div>
 
-    <!-- BOOKMARKS -->
     <div class="section" id="section-bookmarks">
       <div class="card">
         <div class="card-title">我的收藏</div>
@@ -281,7 +265,6 @@
       </div>
     </div>
 
-    <!-- COMMENTS -->
     <div class="section" id="section-comments">
       <div class="card">
         <div class="card-title">我的留言記錄</div>
@@ -289,7 +272,6 @@
       </div>
     </div>
 
-    <!-- NOTIFY -->
     <div class="section" id="section-notify">
       <div class="card">
         <div class="card-title">通知設定</div>
@@ -301,7 +283,6 @@
       </div>
     </div>
 
-    <!-- CUSTOMS -->
     <div class="section" id="section-customs">
       <div class="card">
         <div class="card-title">聯絡資料</div>
@@ -318,7 +299,6 @@
       </div>
     </div>
 
-    <!-- ADMIN -->
     <div class="section" id="section-admin">
       <div class="admin-card">
         <h3>🛡️ 管理員後台</h3>
@@ -328,11 +308,6 @@
           進入後台
         </a>
       </div>
-      <div class="card">
-        <div class="card-title">修改管理員密碼</div>
-        <div class="field"><label>新密碼（至少 8 個字元）</label><div class="pw-wrap"><input type="password" id="admin-pw"><button class="pw-toggle" onclick="togglePw('admin-pw')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
-        <button class="btn btn-primary" onclick="saveAdminPw()">更新密碼</button>
-      </div>
     </div>
 
   </div>
@@ -341,9 +316,22 @@
 <div id="toast"></div>
 
 <script>
+// ── SUPABASE INIT ──
+const { createClient } = window.supabase;
+const db = createClient(
+  'https://ebxixctntvpfzhgvbvbn.supabase.co',
+  'sb_publishable_ra5tuKIAAStLvHZE-7dZLQ_XuXobLVm'
+);
+
+let currentUser = null;
+
 // ── SESSION CHECK ──
-const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
-if (!session) { window.location.href = 'login.html'; }
+(async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  currentUser = session.user;
+  init();
+})();
 
 // ── HELPERS ──
 const DB = {
@@ -366,7 +354,6 @@ function checkStr(pw) {
   bar.style.width = lv.w; bar.style.background = lv.bg;
 }
 
-// ── SECTION SWITCH ──
 function show(id, el) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.side-item').forEach(s => s.classList.remove('active'));
@@ -378,43 +365,43 @@ function show(id, el) {
 
 // ── INIT ──
 function init() {
-  if (!session) return;
+  if (!currentUser) return;
 
-  const name     = session.name     || 'Dash 用戶';
-  const username = session.username || '';
-  const isAdmin  = session.isAdmin  || false;
+  const meta        = currentUser.user_metadata || {};
+  const displayName = meta.display_name || meta.username || currentUser.email.split('@')[0];
+  const username    = meta.username || '';
+  // Admin: check if email matches your admin email
+  const isAdmin     = currentUser.email === 'dash_admin@dash.tw'; // 改成你的管理員 email
 
-  // Sidebar
-  document.getElementById('sidebar-name').textContent     = name;
-  document.getElementById('sidebar-username').textContent = username;
-  document.getElementById('avatar-initial').textContent   = name.charAt(0).toUpperCase();
+  document.getElementById('sidebar-name').textContent     = displayName;
+  document.getElementById('sidebar-username').textContent = username ? '@' + username : currentUser.email;
+  document.getElementById('avatar-initial').textContent   = displayName.charAt(0).toUpperCase();
 
-  // Admin badge + nav
   if (isAdmin) {
     const badge = document.getElementById('profile-badge');
     badge.innerHTML = '🛡️ 管理員';
-    badge.style.background    = '#fff3cd';
-    badge.style.color         = '#856404';
-    badge.style.borderColor   = '#ffc107';
+    badge.style.background  = '#fff3cd';
+    badge.style.color       = '#856404';
+    badge.style.borderColor = '#ffc107';
     document.getElementById('admin-nav').style.display     = 'flex';
     document.getElementById('admin-divider').style.display = 'block';
   }
 
   // Avatar
-  const user = DB.get('dash_user', {});
-  if (user.avatar) {
+  const userData = DB.get('dash_user_' + currentUser.id, {});
+  if (userData.avatar) {
     const img = document.getElementById('avatar-img');
-    img.src = user.avatar; img.style.display = 'block';
+    img.src = userData.avatar; img.style.display = 'block';
     document.getElementById('avatar-initial').style.display = 'none';
   }
 
   // Fill form
-  document.getElementById('p-name').value     = name;
+  document.getElementById('p-name').value     = displayName;
   document.getElementById('p-username').value = username;
-  document.getElementById('p-phone').value    = user.phone || '';
-  document.getElementById('p-bio').value      = user.bio   || '';
+  document.getElementById('p-phone').value    = userData.phone || '';
+  document.getElementById('p-bio').value      = userData.bio   || '';
 
-  const customs = DB.get('dash_customs', {});
+  const customs = DB.get('dash_customs_' + currentUser.id, {});
   document.getElementById('c-name').value  = customs.name  || '';
   document.getElementById('c-id').value    = customs.id    || '';
   document.getElementById('c-phone').value = customs.phone || '';
@@ -426,8 +413,11 @@ function uploadAvatar(input) {
   const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    const user = DB.get('dash_user', {}); user.avatar = e.target.result; DB.set('dash_user', user);
-    const img = document.getElementById('avatar-img'); img.src = e.target.result; img.style.display = 'block';
+    const userData = DB.get('dash_user_' + currentUser.id, {});
+    userData.avatar = e.target.result;
+    DB.set('dash_user_' + currentUser.id, userData);
+    const img = document.getElementById('avatar-img');
+    img.src = e.target.result; img.style.display = 'block';
     document.getElementById('avatar-initial').style.display = 'none';
     toast('頭貼已更新！');
   };
@@ -435,43 +425,42 @@ function uploadAvatar(input) {
 }
 
 // ── PROFILE ──
-function saveProfile() {
-  const user = DB.get('dash_user', {});
-  user.name  = document.getElementById('p-name').value.trim() || session.name;
-  user.phone = document.getElementById('p-phone').value.trim();
-  user.bio   = document.getElementById('p-bio').value.trim();
-  DB.set('dash_user', user);
-  document.getElementById('sidebar-name').textContent = user.name;
+async function saveProfile() {
+  const displayName = document.getElementById('p-name').value.trim();
+  const phone       = document.getElementById('p-phone').value.trim();
+  const bio         = document.getElementById('p-bio').value.trim();
+
+  // Update Supabase user_metadata
+  const { error } = await db.auth.updateUser({
+    data: { display_name: displayName }
+  });
+  if (error) { toast('儲存失敗：' + error.message, true); return; }
+
+  // Save extra fields locally (until you have a profiles table)
+  const userData = DB.get('dash_user_' + currentUser.id, {});
+  userData.phone = phone; userData.bio = bio;
+  DB.set('dash_user_' + currentUser.id, userData);
+
+  document.getElementById('sidebar-name').textContent = displayName;
   toast('資料已儲存！');
 }
 
 // ── PASSWORD ──
-function savePw() {
-  const cur = document.getElementById('pw-cur').value;
+async function savePw() {
   const nw  = document.getElementById('pw-new').value;
   const cfm = document.getElementById('pw-cfm').value;
-  if (!cur || !nw || !cfm)   { toast('請填寫所有欄位', true); return; }
-  if (nw.length < 8)         { toast('密碼至少需要 8 個字元', true); return; }
-  if (nw !== cfm)            { toast('兩次密碼不一致', true); return; }
-  const users = JSON.parse(localStorage.getItem('dash_users') || '[]');
-  const idx = users.findIndex(u => u.username === session.username);
-  if (idx !== -1 && users[idx].password !== cur) { toast('目前密碼不正確', true); return; }
-  if (idx !== -1) { users[idx].password = nw; localStorage.setItem('dash_users', JSON.stringify(users)); }
+  if (!nw || !cfm)   { toast('請填寫所有欄位', true); return; }
+  if (nw.length < 8) { toast('密碼至少需要 8 個字元', true); return; }
+  if (nw !== cfm)    { toast('兩次密碼不一致', true); return; }
+
+  const { error } = await db.auth.updateUser({ password: nw });
+  if (error) { toast('更新失敗：' + error.message, true); return; }
+  document.getElementById('pw-new').value = '';
+  document.getElementById('pw-cfm').value = '';
   toast('密碼已更新！');
 }
 
-// ── ADMIN PW ──
-function saveAdminPw() {
-  const pw = document.getElementById('admin-pw').value;
-  if (!pw || pw.length < 8) { toast('密碼至少 8 個字元', true); return; }
-  const users = JSON.parse(localStorage.getItem('dash_users') || '[]');
-  const idx = users.findIndex(u => u.username === 'dash_admin');
-  if (idx !== -1) { users[idx].password = pw; localStorage.setItem('dash_users', JSON.stringify(users)); }
-  document.getElementById('admin-pw').value = '';
-  toast('管理員密碼已更新！');
-}
-
-// ── BOOKMARKS ──
+// ── BOOKMARKS / COMMENTS (localStorage, same as before) ──
 function renderBookmarks() {
   const bookmarks = DB.get('dash_bookmarks', []);
   const articles  = DB.get('dash_articles', []);
@@ -485,14 +474,15 @@ function renderBookmarks() {
     </a>`).join('');
 }
 
-// ── COMMENTS ──
 function renderComments() {
   const articles = DB.get('dash_articles', []);
   const el = document.getElementById('my-comments');
+  const meta = currentUser.user_metadata || {};
+  const displayName = meta.display_name || '';
   const all = [];
   articles.forEach(a => {
     DB.get('comments_' + a.id, []).forEach(c => {
-      if (c.name === session.name) all.push({ ...c, articleId: a.id, articleTitle: a.title });
+      if (c.name === displayName) all.push({ ...c, articleId: a.id, articleTitle: a.title });
     });
   });
   if (!all.length) { el.innerHTML = '<div class="empty">還沒有留言記錄</div>'; return; }
@@ -507,7 +497,7 @@ function renderComments() {
 
 // ── CUSTOMS ──
 function saveCustoms() {
-  DB.set('dash_customs', {
+  DB.set('dash_customs_' + currentUser.id, {
     name:  document.getElementById('c-name').value.trim(),
     id:    document.getElementById('c-id').value.trim(),
     phone: document.getElementById('c-phone').value.trim(),
@@ -517,22 +507,23 @@ function saveCustoms() {
 }
 
 // ── LOGOUT ──
-function doLogout() {
-  if (confirm('確定要登出嗎？')) { localStorage.removeItem('dash_session'); window.location.href = 'login.html'; }
-}
-
-// ── DELETE ──
-function doDelete() {
-  if (confirm('確定要永久刪除帳號嗎？此操作無法復原。')) {
-    if (confirm('再次確認：所有資料將永久刪除。確定繼續嗎？')) {
-      toast('帳號刪除功能需要串接後端服務。（展示版本）');
-    }
+async function doLogout() {
+  if (confirm('確定要登出嗎？')) {
+    await db.auth.signOut();
+    window.location.href = 'login.html';
   }
 }
 
-// ── START ──
-init();
+// ── DELETE ──
+async function doDelete() {
+  if (confirm('確定要永久刪除帳號嗎？此操作無法復原。')) {
+    if (confirm('再次確認：所有資料將永久刪除。確定繼續嗎？')) {
+      toast('帳號刪除需要透過 Supabase 後台完成，請聯絡管理員。', true);
+    }
+  }
+}
 </script>
+
 <footer style="padding:20px 32px;border-top:1px solid #e8e8e8;background:white;text-align:center;font-size:12px;color:#888;margin-top:40px">
   © 2026 Dash · <a href="index.html" style="color:#0F4C81;text-decoration:none">回首頁</a> · <a href="picks.html" style="color:#0F4C81;text-decoration:none">所有選物</a>
 </footer>
