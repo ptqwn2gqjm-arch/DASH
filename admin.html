@@ -169,7 +169,7 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="sidebar-logo">DA<span>SH</span></div>
+  <div class="sidebar-logo"><a href="index.html" style="text-decoration:none;color:inherit">DA<span>SH</span></a></div>
   <nav class="sidebar-nav">
     <div class="nav-section">主要</div>
     <div class="nav-item active" onclick="switchPage(this,'dashboard')">
@@ -215,6 +215,15 @@
     <div class="nav-item" onclick="switchPage(this,'backup')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
       <span>備份匯入</span>
+    </div>
+    <div class="nav-section" style="margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)"></div>
+    <div class="nav-item" onclick="window.location.href='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span>回到前台</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='profile.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>我的帳號</span>
     </div>
   </nav>
 </div>
