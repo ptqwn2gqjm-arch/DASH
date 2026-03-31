@@ -20,7 +20,6 @@
   html { scroll-behavior: smooth; }
   body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; overflow-x: hidden; }
 
-  /* ── INTRO ── */
   .panel { position: fixed; left: 0; right: 0; height: 50vh; background: var(--blue); z-index: 1000; overflow: hidden; }
   #pt { top: 0; }
   #pb { top: 50vh; }
@@ -29,7 +28,6 @@
   #logo-bot { top: 0; align-items: flex-start; transform: translateY(-50%); }
   .da, .sh { display: inline-block; }
 
-  /* ── NAVBAR ── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
@@ -53,56 +51,22 @@
   .nav-login { background: var(--blue) !important; color: white !important; }
   .nav-login:hover { background: var(--blue-light) !important; }
 
-  /* ── HERO ANIMATIONS ── */
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeSlideLeft {
-    from { opacity: 0; transform: translateX(-20px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes shimmer {
-    0%   { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-  @keyframes floatY {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-10px); }
-  }
-  @keyframes pulse-ring {
-    0%   { transform: scale(0.8); opacity: 0.6; }
-    100% { transform: scale(2.2); opacity: 0; }
-  }
+  @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  @keyframes floatY { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+  @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.6; } 100% { transform: scale(2.2); opacity: 0; } }
 
-  /* All hero children start hidden, revealed by JS after intro */
-  .hero-badge, .hero-title, .hero-sub, .hero-stats, .hero-cta, .hero-floats {
-    opacity: 0;
-  }
+  .hero-badge, .hero-title, .hero-sub, .hero-stats, .hero-cta, .hero-floats { opacity: 0; }
 
-  /* HERO badge */
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: #f0f5ff; border: 1px solid #c8d8f0; border-radius: 20px;
-    padding: 6px 14px; font-size: 12px; color: var(--blue); font-weight: 500;
-    margin-bottom: 20px; align-self: flex-start;
-  }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: #f0f5ff; border: 1px solid #c8d8f0; border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--blue); font-weight: 500; margin-bottom: 20px; align-self: flex-start; }
   .hero-badge .dot { width: 6px; height: 6px; background: #2ecc71; border-radius: 50%; position: relative; flex-shrink: 0; }
   .hero-badge .dot::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 1.5px solid #2ecc71; animation: pulse-ring 1.5s ease-out infinite; }
 
-  /* HERO stats */
   .hero-stats { display: flex; gap: 40px; margin-bottom: 44px; }
   .stat-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 36px; color: var(--blue); line-height: 1; letter-spacing: 0.02em; }
   .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
 
-  /* Shimmer */
-  .hero-title .shimmer {
-    background: linear-gradient(90deg, var(--blue) 0%, #4a90d9 40%, var(--blue) 60%, #0a3560 100%);
-    background-size: 200% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    animation: shimmer 3s linear 2s infinite;
-  }
+  .hero-title .shimmer { background: linear-gradient(90deg, var(--blue) 0%, #4a90d9 40%, var(--blue) 60%, #0a3560 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear 2s infinite; }
 
-  /* Floats */
   .hero-floats { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 16px; pointer-events: none; }
   .float-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 20px rgba(15,76,129,0.08); width: 240px; }
   .float-card-icon { width: 40px; height: 40px; border-radius: 8px; background: #f0f5ff; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
@@ -112,13 +76,9 @@
 
   @media (max-width: 900px) { .hero-floats { display: none; } .hero-stats { gap: 24px; } }
 
-  /* ── HERO ── */
   .hero { min-height: 100vh; padding: 120px 60px 80px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
-  .hero.visible { opacity: 1; transform: translateY(0); }
   .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 80% 40%, rgba(15,76,129,0.06) 0%, transparent 70%); pointer-events: none; }
-  .hero-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; font-weight: 500; }
   .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(64px, 10vw, 120px); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 28px; }
-  .hero-title .blue { color: var(--blue); }
   .hero-title .outline { color: transparent; -webkit-text-stroke: 2px var(--blue); }
   .hero-sub { font-size: 18px; color: var(--muted); line-height: 1.7; max-width: 480px; margin-bottom: 44px; font-weight: 300; }
   .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--blue); color: white; padding: 14px 32px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.1em; text-decoration: none; transition: all 0.2s; align-self: flex-start; }
@@ -127,7 +87,6 @@
   .hero-scroll { position: absolute; bottom: 40px; left: 40px; display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
   .scroll-line { width: 40px; height: 1px; background: var(--border); }
 
-  /* ── SECTION ── */
   .section { padding: 80px 40px; opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .section.visible { opacity: 1; transform: translateY(0); }
   .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; }
@@ -136,7 +95,6 @@
   .section-link { font-size: 12px; letter-spacing: 0.1em; color: var(--blue); text-decoration: none; text-transform: uppercase; font-weight: 500; border-bottom: 1px solid var(--blue); padding-bottom: 2px; transition: opacity 0.2s; }
   .section-link:hover { opacity: 0.6; }
 
-  /* ── PICKS ── */
   .picks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
   .pick-card { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; transition: all 0.25s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
   .pick-card:hover { border-color: var(--blue); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,76,129,0.1); }
@@ -151,7 +109,6 @@
   .pick-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--blue); letter-spacing: 0.08em; font-weight: 500; text-transform: uppercase; margin-top: auto; }
   .pick-link svg { width: 14px; height: 14px; }
 
-  /* ── ABOUT STRIP ── */
   .about-strip { background: var(--blue); padding: 60px 40px; display: flex; align-items: center; justify-content: space-between; gap: 40px; opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .about-strip.visible { opacity: 1; transform: translateY(0); }
   .about-strip h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 40px; color: white; letter-spacing: 0.04em; line-height: 1.1; }
@@ -159,11 +116,6 @@
   .about-strip a { display: inline-flex; align-items: center; gap: 8px; background: white; color: var(--blue); padding: 12px 24px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; transition: all 0.2s; flex-shrink: 0; }
   .about-strip a:hover { transform: translateY(-2px); opacity: 0.9; }
 
-  /* ── ABOUT SECTION ── */
-  .about-section { padding: 80px 40px; opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .about-section.visible { opacity: 1; transform: translateY(0); }
-
-  /* ── FOOTER ── */
   footer { padding: 32px 40px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
   .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 0.08em; }
   .footer-logo .da { color: var(--blue); }
@@ -182,7 +134,6 @@
 </head>
 <body>
 
-<!-- INTRO -->
 <div class="panel" id="pt">
   <div class="logo" id="logo-top"><span class="da" id="da-t">DA</span><span class="sh" id="sh-t">SH</span></div>
 </div>
@@ -190,7 +141,6 @@
   <div class="logo" id="logo-bot"><span class="da" id="da-b">DA</span><span class="sh" id="sh-b">SH</span></div>
 </div>
 
-<!-- NAVBAR -->
 <nav id="nav">
   <a href="index.html" class="nav-logo"><span class="da">DA</span><span class="sh">SH</span></a>
   <div class="nav-search">
@@ -199,20 +149,15 @@
       onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='picks.html?q='+encodeURIComponent(this.value.trim())">
   </div>
   <ul class="nav-links">
-    
     <li><a href="picks.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>選物</a></li>
     <li><a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>關於</a></li>
     <li><a href="login.html" class="nav-login"><svg viewBox="0 0 24 24" fill="none" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>登入</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
-  <div class="hero-badge">
-    <div class="dot"></div>
-    每週更新選物中
-  </div>
+  <div class="hero-badge"><div class="dot"></div>每週更新選物中</div>
   <h1 class="hero-title"><span class="shimmer">韓迷在買什麼？</span><br>Dash 每週<br><span class="outline">告訴你。</span></h1>
   <p class="hero-sub">美妝、周邊、潮牌，一站看懂韓國選物。</p>
   <div class="hero-stats">
@@ -222,12 +167,9 @@
   </div>
   <a href="picks.html" class="hero-cta">看本週選物 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <div class="hero-scroll"><div class="scroll-line"></div>向下捲動</div>
-
-  <!-- Floating preview cards - loaded from admin -->
   <div class="hero-floats" id="hero-floats"></div>
 </section>
 
-<!-- PICKS -->
 <section class="section" id="picks">
   <div class="section-header">
     <h2 class="section-title">本週<span>選物</span></h2>
@@ -238,7 +180,6 @@
   </div>
 </section>
 
-<!-- ABOUT STRIP -->
 <div class="about-strip" id="about-strip">
   <div>
     <h2>不用飛首爾</h2>
@@ -261,23 +202,15 @@
   const all = [...daEls, ...shEls];
 
   function revealPage() {
-    // Hide intro panels
     if (pt) { pt.style.transition = 'none'; pt.style.display = 'none'; }
     if (pb) { pb.style.transition = 'none'; pb.style.display = 'none'; }
-
-    // Show nav
     const nav = document.getElementById('nav');
     if (nav) nav.style.opacity = '1';
-
-    // Show hero container
     const heroEl = document.getElementById('hero');
     if (heroEl) heroEl.style.opacity = '1';
-
-    // Re-enable scroll
     document.body.style.overflow = '';
     document.body.style.height = '';
 
-    // Stagger hero children
     const items = [
       { sel: '.hero-badge',  delay: 0   },
       { sel: '.hero-title',  delay: 100 },
@@ -296,20 +229,17 @@
       }, delay);
     });
 
-    // Float animation on cards
     setTimeout(() => {
       document.querySelectorAll('.float-card').forEach((c, i) => {
         c.style.animation = `floatY 4s ease-in-out ${0.8 + i * 0.6}s infinite`;
       });
     }, 800);
 
-    // Shimmer on title
     setTimeout(() => {
       const shimmer = document.querySelector('.hero-title .shimmer');
       if (shimmer) shimmer.style.animation = 'shimmer 3s linear infinite';
     }, 600);
 
-    // Show sections
     setTimeout(() => {
       document.querySelectorAll('.section, .about-strip').forEach(el => {
         const rect = el.getBoundingClientRect();
@@ -317,7 +247,6 @@
       });
     }, 200);
 
-    // Load picks and floats
     loadFloatCards();
     renderPicks();
     animateCounts();
@@ -325,7 +254,6 @@
     setupParallax();
   }
 
-  // Skip or run intro
   const visited = sessionStorage.getItem('dash_visited');
   if (visited) {
     revealPage();
@@ -333,17 +261,14 @@
     sessionStorage.setItem('dash_visited', '1');
     document.body.style.overflow = 'hidden';
 
-    // Start letters off-screen
     daEls.forEach(el => { el.style.transform = 'translateX(-120vw)'; });
     shEls.forEach(el => { el.style.transform = 'translateX(120vw)'; });
 
-    // Slide in
     setTimeout(() => {
       daEls.forEach(el => { el.style.transition = 'transform 580ms cubic-bezier(0.22,1,0.36,1)'; el.style.transform = 'translateX(0)'; });
       shEls.forEach(el => { el.style.transition = 'transform 580ms cubic-bezier(0.22,1,0.36,1)'; el.style.transform = 'translateX(0)'; });
     }, 200);
 
-    // Shake letters
     setTimeout(() => {
       const frames = [0, -10, 10, -7, 7, -4, 4, -2, 2, 0];
       let i = 0;
@@ -354,7 +279,6 @@
       }, 40);
     }, 930);
 
-    // Split panels
     setTimeout(() => {
       pt.style.transition = 'transform 520ms cubic-bezier(0.76,0,0.24,1)';
       pt.style.transform = 'translateY(-100%)';
@@ -362,11 +286,9 @@
       pb.style.transform = 'translateY(100%)';
     }, 1300);
 
-    // Reveal page
     setTimeout(revealPage, 1920);
   }
 
-  // Load float cards from admin settings
   function loadFloatCards() {
     const about = JSON.parse(localStorage.getItem('dash_about') || '{}');
     const defaults = [
@@ -386,15 +308,12 @@
           <div class="float-card-sub">${c.sub}</div>
         </div>
       </div>`).join('');
-
-    // Apply background
     if (about.bgFrom || about.bgTo) {
       const hero = document.getElementById('hero');
       if (hero) hero.style.background = `linear-gradient(135deg, ${about.bgFrom || '#eef3fa'} 0%, ${about.bgTo || '#ffffff'} 100%)`;
     }
   }
 
-  // Render picks
   function renderPicks() {
     const grid = document.getElementById('picks-grid');
     if (!grid) return;
@@ -420,7 +339,6 @@
     } catch { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#888">無法載入文章。</div>'; }
   }
 
-  // Animate counters
   function animateCounts() {
     function count(id, target, suffix) {
       const el = document.getElementById(id); if (!el) return;
@@ -433,7 +351,6 @@
     count('stat-platform', platforms.length || 3, '+');
   }
 
-  // Scroll reveal
   function setupScrollReveal() {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -441,7 +358,6 @@
     document.querySelectorAll('.section, .about-strip').forEach(el => obs.observe(el));
   }
 
-  // Parallax
   function setupParallax() {
     const floats = document.querySelector('.hero-floats');
     const bg     = document.querySelector('.hero-bg');
@@ -458,7 +374,10 @@
     });
   }
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (async function() {
   const { createClient } = window.supabase;
