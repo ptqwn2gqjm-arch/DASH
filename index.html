@@ -458,26 +458,23 @@
     });
   }
 
-  // Nav session check
-  (function() {
-    const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
-    const btn = document.querySelector('.nav-login');
-    if (btn && session) {
-      btn.href = 'profile.html';
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">我的</span>';
-    }
-  })();
-
-})();
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// Update nav login button
-(function() {
-  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
-  const loginBtn = document.querySelector('.nav-login');
-  if (loginBtn && session) {
-    loginBtn.href = 'profile.html';
-    loginBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">我的</span>';
+(async function() {
+  const { createClient } = window.supabase;
+  const db = createClient(
+    'https://ebxixctntvpfzhgvbvbn.supabase.co',
+    'sb_publishable_ra5tuKIAAStLvHZE-7dZLQ_XuXobLVm'
+  );
+  const { data: { session } } = await db.auth.getSession();
+  const btn = document.querySelector('.nav-login');
+  if (!btn) return;
+  if (session) {
+    const name = session.user.user_metadata?.display_name
+              || session.user.user_metadata?.username
+              || session.user.email.split('@')[0];
+    btn.href = 'profile.html';
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`;
   }
 })();
 </script>
