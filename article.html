@@ -257,7 +257,7 @@ let currentUser = null;
 })();
 
 // ── LOAD ARTICLE ──
-function loadArticle() {
+async function loadArticle() {
   if (!articleId) { showError(); return; }
   try {
     const articles = JSON.parse(localStorage.getItem('dash_articles') || '[]');
@@ -288,7 +288,7 @@ function loadArticle() {
 
     updateBookmarkBtn(articleId);
     renderRelated(articles, articleId, a.platform);
-    renderComments();
+    await renderComments();
   } catch(e) { showError(); }
 }
 
@@ -352,16 +352,25 @@ async function toggleBookmark() {
 }
 
 // ── COMMENTS ──
-function getComments() { try { return JSON.parse(localStorage.getItem('comments_' + articleId) || '[]'); } catch { return []; } }
-function saveComments(arr) { localStorage.setItem('comments_' + articleId, JSON.stringify(arr)); }
+async function renderComments() {
+  const list  = document.getElementById('comment-list');
+  const count = document.getElementById('comment-count');
+  list.innerHTML = '<div class="no-comments">載入中⋯</div>';
 
-function renderComments() {
-  const list     = document.getElementById('comment-list');
-  const comments = getComments();
-  const count    = document.getElementById('comment-count');
-  count.textContent = comments.length ? `(${comments.length})` : '';
-  if (!comments.length) { list.innerHTML = '<div class="no-comments">還沒有留言，來說說你的看法！</div>'; return; }
-  list.innerHTML = comments.map(c => `
+  const { data, error } = await db
+    .from('comments')
+    .select('*')
+    .eq('article_id', articleId)
+    .order('created_at', { ascending: false });
+
+  if (error || !data || !data.length) {
+    count.textContent = '';
+    list.innerHTML = '<div class="no-comments">還沒有留言，來說說你的看法！</div>';
+    return;
+  }
+
+  count.textContent = `(${data.length})`;
+  list.innerHTML = data.map(c => `
     <div class="comment">
       <div class="comment-header"><span class="comment-name">${c.name}</span><span class="comment-date">${c.date}</span></div>
       <div class="comment-text">${c.text}</div>
@@ -369,16 +378,23 @@ function renderComments() {
     </div>`).join('');
 }
 
-function submitComment() {
+async function submitComment() {
   const nameInput = document.getElementById('c-name');
   const textInput = document.getElementById('c-text');
   const name = nameInput.value.trim();
   const text = textInput.value.trim();
   if (!name) { alert('請填寫名字。'); return; }
   if (!text) { alert('請填寫留言內容。'); return; }
-  const comments = getComments();
-  comments.unshift({ name, text, date: new Date().toLocaleDateString('zh-TW') });
-  saveComments(comments);
+
+  const { error } = await db.from('comments').insert({
+    article_id: articleId,
+    user_id: currentUser?.id || null,
+    name,
+    text,
+    date: new Date().toLocaleDateString('zh-TW'),
+  });
+
+  if (error) { alert('留言失敗，請再試一次。'); return; }
   textInput.value = '';
   if (!currentUser) nameInput.value = '';
   renderComments();
