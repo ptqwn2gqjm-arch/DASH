@@ -20,7 +20,6 @@
   html { scroll-behavior: smooth; }
   body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); background: var(--bg); overflow-x: hidden; }
 
-  /* ── NAV ── */
   nav { position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; gap: 16px; z-index: 100; }
   .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: 0.08em; text-decoration: none; flex-shrink: 0; }
   .nav-logo .da { color: var(--blue); }
@@ -37,7 +36,6 @@
   .nav-login { background: var(--blue) !important; color: white !important; }
   .nav-login:hover { background: var(--blue-light) !important; }
 
-  /* ── ANIMATIONS ── */
   .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
   .reveal-left { opacity: 0; transform: translateX(-32px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -48,42 +46,26 @@
   .delay-2 { transition-delay: 0.2s; }
   .delay-3 { transition-delay: 0.3s; }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 85vh; display: grid; grid-template-columns: 1fr 1fr;
-    overflow: hidden;
-  }
+  .hero { min-height: 85vh; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
   .hero-text { padding: 100px 60px; display: flex; flex-direction: column; justify-content: center; }
   .hero-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; font-weight: 500; }
   .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(52px, 7vw, 88px); line-height: 1; letter-spacing: 0.02em; margin-bottom: 28px; }
   .hero-title .blue { color: var(--blue); }
   .hero-desc { font-size: 16px; color: var(--muted); line-height: 1.9; font-weight: 300; max-width: 420px; }
-  .hero-visual {
-    background: var(--blue); position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .hero-visual::before {
-    content: 'DASH';
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
-    font-size: clamp(80px, 14vw, 180px); color: rgba(255,255,255,0.08);
-    letter-spacing: 0.06em; position: absolute;
-  }
+  .hero-visual { background: var(--blue); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .hero-visual::before { content: 'DASH'; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(80px, 14vw, 180px); color: rgba(255,255,255,0.08); letter-spacing: 0.06em; position: absolute; }
   .hero-visual img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
 
-  /* ── DIVIDER ── */
   .divider { height: 1px; background: var(--border); margin: 0 60px; }
 
-  /* ── STORY ── */
   .story { padding: 100px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .story-text .label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; font-weight: 500; }
   .story-text h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 52px); letter-spacing: 0.02em; margin-bottom: 28px; }
   .story-text h2 span { color: var(--blue); }
   .story-text p { font-size: 15px; color: #444; line-height: 1.9; font-weight: 300; margin-bottom: 18px; }
-  .story-text p:last-child { margin-bottom: 0; }
   .story-img { border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; background: #f0f4f8; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; }
   .story-img img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* ── VALUES ── */
   .values { padding: 100px 60px; background: #fafbfc; }
   .values-header { margin-bottom: 52px; }
   .values-header .label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; font-weight: 500; }
@@ -96,7 +78,6 @@
   .value-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.04em; margin-bottom: 12px; color: var(--blue); }
   .value-desc { font-size: 14px; color: var(--muted); line-height: 1.8; font-weight: 300; }
 
-  /* ── MISSION ── */
   .mission { padding: 100px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .mission-img { border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; background: #f0f4f8; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; }
   .mission-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -105,7 +86,6 @@
   .mission-text h2 span { color: var(--blue); }
   .mission-text p { font-size: 15px; color: #444; line-height: 1.9; font-weight: 300; margin-bottom: 18px; }
 
-  /* ── CTA ── */
   .cta { background: var(--blue); padding: 100px 60px; text-align: center; }
   .cta h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(40px, 6vw, 72px); color: white; letter-spacing: 0.04em; line-height: 1; margin-bottom: 16px; }
   .cta p { font-size: 16px; color: rgba(255,255,255,0.6); margin-bottom: 40px; font-weight: 300; }
@@ -122,24 +102,18 @@
     .hero, .story, .mission { grid-template-columns: 1fr; }
     .hero-visual { min-height: 280px; }
     .hero-text, .story, .values, .mission, .cta { padding: 60px 24px; }
-    .story { gap: 40px; }
-    .mission { gap: 40px; }
+    .story { gap: 40px; } .mission { gap: 40px; }
     .values-grid { grid-template-columns: 1fr; }
     nav { padding: 0 16px; gap: 8px; }
-    .nav-search { max-width: 180px; }
     footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
     .divider { margin: 0 24px; }
   }
   @media (max-width: 768px) {
     .hero-text { padding: 60px 20px; }
-    .hero-title { font-size: 48px; }
     .story, .values, .mission { padding: 48px 20px; }
-    .values-grid { gap: 16px; }
-    .value-card { padding: 24px 20px; }
-    .cta { padding: 60px 20px; }
-    .cta h2 { font-size: 36px; }
+    .values-grid { gap: 16px; } .value-card { padding: 24px 20px; }
+    .cta { padding: 60px 20px; } .cta h2 { font-size: 36px; }
     .nav-links { display: none; }
-    .nav-search { max-width: 160px; }
   }
 </style>
 </head>
@@ -152,14 +126,12 @@
     <input type="text" placeholder="搜尋文章⋯" onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='picks.html?q='+encodeURIComponent(this.value.trim())">
   </div>
   <ul class="nav-links">
-    
     <li><a href="picks.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>選物</a></li>
     <li><a href="about.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>關於</a></li>
     <li><a href="login.html" class="nav-login"><svg viewBox="0 0 24 24" fill="none" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>登入</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-text">
     <p class="hero-label reveal">關於 Dash</p>
@@ -171,7 +143,6 @@
 
 <div class="divider"></div>
 
-<!-- STORY -->
 <div class="story">
   <div class="story-text reveal-left">
     <div class="label">我們的故事</div>
@@ -185,7 +156,6 @@
 
 <div class="divider"></div>
 
-<!-- VALUES -->
 <div class="values">
   <div class="values-header reveal">
     <div class="label">我們相信</div>
@@ -212,7 +182,6 @@
 
 <div class="divider"></div>
 
-<!-- MISSION -->
 <div class="mission">
   <div class="mission-img reveal-left" id="about-mission-img">圖片</div>
   <div class="mission-text reveal-right">
@@ -223,7 +192,6 @@
   </div>
 </div>
 
-<!-- CTA -->
 <div class="cta reveal">
   <h2>韓迷在買什麼？</h2>
   <p>美妝、周邊、潮牌，這週精選在這裡。</p>
@@ -236,22 +204,21 @@
 </footer>
 
 <script>
-// Scroll reveal
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
 
-// Load from admin
 try {
   const about = JSON.parse(localStorage.getItem('dash_about') || '{}');
   if (about.title) document.getElementById('about-title').innerHTML = about.title;
   if (about.desc)  document.getElementById('about-desc').textContent = about.desc;
-  if (about.heroImg) { const el = document.getElementById('about-hero-img'); el.innerHTML = `<img src="${about.heroImg}">`; }
-  if (about.storyImg) { const el = document.getElementById('about-story-img'); el.innerHTML = `<img src="${about.storyImg}">`; }
+  if (about.heroImg)    { const el = document.getElementById('about-hero-img');    el.innerHTML = `<img src="${about.heroImg}">`; }
+  if (about.storyImg)   { const el = document.getElementById('about-story-img');   el.innerHTML = `<img src="${about.storyImg}">`; }
   if (about.missionImg) { const el = document.getElementById('about-mission-img'); el.innerHTML = `<img src="${about.missionImg}">`; }
 } catch(e) {}
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (async function() {
@@ -268,7 +235,10 @@ try {
               || session.user.user_metadata?.username
               || session.user.email.split('@')[0];
     btn.href = 'profile.html';
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`;
+    const _av = JSON.parse(localStorage.getItem('dash_user_' + session.user.id) || '{}');
+    btn.innerHTML = _av.avatar
+      ? `<img src="${_av.avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.6)"><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`;
   }
 })();
 </script>
