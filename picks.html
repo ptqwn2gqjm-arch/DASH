@@ -61,6 +61,253 @@
   .pick-desc { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 16px; }
   .pick-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--blue); letter-spacing: 0.08em; font-weight: 500; text-transform: uppercase; }
   .pick-link svg { width: 14px; height: 14px; }
+  .pin-badge { background: #f39c12; color: white; font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 500; letter-spacing: 0.05em; }
+  .empty { text-align: center; padding: 80px 40px; color: var(--muted); font-size: 15px; }
+
+  .wish-section { background: #fafbfc; border-top: 1px solid var(--border); padding: 80px 40px; }
+  .wish-inner { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: center; }
+  .wish-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; font-weight: 500; }
+  .wish-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1.1; }
+  .wish-title span { color: var(--blue); }
+  .wish-desc { font-size: 14px; color: var(--muted); line-height: 1.8; font-weight: 300; }
+  .wish-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .wish-field label { font-size: 12px; font-weight: 500; color: #555; letter-spacing: 0.04em; }
+  .wish-field textarea, .wish-field input, .wish-field select { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Noto Sans TC', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; resize: none; background: white; }
+  .wish-field textarea:focus, .wish-field input:focus, .wish-field select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(15,76,129,0.08); }
+  .wish-row { display: flex; gap: 12px; }
+  .wish-row .wish-field { flex: 1; }
+  .wish-form button { width: 100%; padding: 13px; background: var(--blue); color: white; border: none; border-radius: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; }
+  .wish-form button:hover { background: var(--blue-light); transform: translateY(-1px); }
+  .wish-success { text-align: center; }
+  .wish-success h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 28px; color: var(--blue); margin-bottom: 8px; }
+  .wish-success p { font-size: 14px; color: var(--muted); }
+  .wish-success button { background: none; border: 1.5px solid var(--blue); color: var(--blue); padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 13px; font-family: 'Noto Sans TC', sans-serif; transition: all 0.2s; }
+  .wish-success button:hover { background: #f0f5ff; }
+  @media (max-width: 768px) { .wish-inner { grid-template-columns: 1fr; gap: 32px; } .wish-section { padding: 60px 20px; } }
+
+  footer { padding: 32px 40px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; margin-top: 40px; }
+  .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 0.08em; }
+  .footer-logo .da { color: var(--blue); }
+  .footer-logo .sh { color: var(--text); }
+  .footer-copy { font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero-small, .filters, .picks-wrap { padding-left: 20px; padding-right: 20px; }
+    footer { padding: 24px 20px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="da">DA</span><span class="sh">SH</span></a>
+  <div class="nav-search">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="搜尋文章⋯" id="nav-search-input"
+      onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='picks.html?q='+encodeURIComponent(this.value.trim())">
+  </div>
+  <ul class="nav-links">
+    <li><a href="picks.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>選物</a></li>
+    <li><a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>關於</a></li>
+    <li><a href="login.html" class="nav-login"><svg viewBox="0 0 24 24" fill="none" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>登入</a></li>
+  </ul>
+</nav>
+
+<div class="hero-small">
+  <div class="hero-label">編輯精選</div>
+  <h1 class="hero-title">所有<span>選物</span></h1>
+</div>
+
+<div class="filters" id="filters">
+  <button class="filter-btn active" onclick="filterPicks('all', this)">全部</button>
+</div>
+
+<div class="picks-wrap">
+  <div class="picks-grid" id="picks-grid"></div>
+</div>
+
+<div class="wish-section">
+  <div class="wish-inner">
+    <div class="wish-text">
+      <div class="wish-label">許個願吧</div>
+      <h2 class="wish-title">有什麼想讓 Dash <span>介紹</span>的？</h2>
+      <p class="wish-desc">不用飛首爾，也能知道韓國現在最夯什麼——告訴我們你想看什麼，我們認真考慮。</p>
+    </div>
+    <div class="wish-form" id="wish-form">
+      <div class="wish-field">
+        <label>許願內容</label>
+        <textarea id="w-content" placeholder="例：CORTIS 新專輯周邊開箱、Olive Young 防曬比較、怎麼用 Musinsa 買衣服⋯" rows="3"></textarea>
+      </div>
+      <div class="wish-row">
+        <div class="wish-field">
+          <label>分類</label>
+          <select id="w-cat">
+            <option value="商品">商品</option>
+            <option value="品牌">品牌</option>
+            <option value="教學">教學</option>
+            <option value="比較">比較文</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        <div class="wish-field" style="flex:2">
+          <label>備註（選填）</label>
+          <input type="text" id="w-note" placeholder="為什麼想看這篇？">
+        </div>
+      </div>
+      <button onclick="submitWish()">送出許願 ✨</button>
+    </div>
+    <div class="wish-success" id="wish-success" style="display:none">
+      <div style="font-size:48px;margin-bottom:16px">🌟</div>
+      <h3>許願成功！</h3>
+      <p>我們收到了，會認真考慮的。</p>
+      <button onclick="resetWish()" style="margin-top:16px">再許一個願</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo"><span class="da">DA</span><span class="sh">SH</span></div>
+  <div class="footer-copy">© 2026 Dash. 韓迷做給韓迷的選物平台。</div>
+</footer>
+
+<script>
+let allArticles = [];
+let currentFilter = 'all';
+
+function loadArticles() {
+  try {
+    allArticles = JSON.parse(localStorage.getItem('dash_articles') || '[]');
+    const pinned = allArticles.filter(a => a.pinned);
+    const rest   = allArticles.filter(a => !a.pinned);
+    allArticles  = [...pinned, ...rest];
+    const platforms = [...new Set(allArticles.map(a => a.platform))];
+    const filters = document.getElementById('filters');
+    filters.innerHTML = `<button class="filter-btn active" onclick="filterPicks('all', this)">全部</button>` +
+      platforms.map(p => `<button class="filter-btn" onclick="filterPicks('${p}', this)">${p}</button>`).join('');
+    renderGrid();
+  } catch(e) {
+    document.getElementById('picks-grid').innerHTML = '<div class="empty">無法載入文章。</div>';
+  }
+}
+
+function filterPicks(platform, btn) {
+  currentFilter = platform;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('picks-grid');
+  const filtered = currentFilter === 'all' ? allArticles : allArticles.filter(a => a.platform === currentFilter);
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1">這個分類還沒有文章。</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(a => `
+    <a class="pick-card" href="article.html?id=${a.id}">
+      <div class="pick-img">${a.cover ? `<img src="${a.cover}" alt="${a.title}">` : '商品圖片'}</div>
+      <div class="pick-body">
+        <div class="pick-meta">
+          <span class="pick-platform">${a.platform}</span>
+          ${a.pinned ? '<span class="pin-badge">⭐ 置頂</span>' : ''}
+          <span class="pick-date">${a.date ? a.date.slice(5) : ''}</span>
+        </div>
+        <div class="pick-name">${a.title}</div>
+        <div class="pick-desc">${a.desc}</div>
+        <div class="pick-link">${a.linkLabel || '閱讀更多'}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+      </div>
+    </a>`).join('');
+}
+
+const urlParams = new URLSearchParams(location.search);
+const searchQ = urlParams.get('q');
+if (searchQ) {
+  loadArticles();
+  allArticles = allArticles.filter(a => a.title.toLowerCase().includes(searchQ.toLowerCase()));
+  document.querySelector('.hero-title').innerHTML = `搜尋：<span>${searchQ}</span>`;
+  renderGrid();
+} else {
+  loadArticles();
+}
+
+function submitWish() {
+  const content = document.getElementById('w-content').value.trim();
+  if (!content) { alert('請填寫許願內容。'); return; }
+  const wish = {
+    id: 'wish-' + Date.now(), content,
+    cat:    document.getElementById('w-cat').value,
+    note:   document.getElementById('w-note').value.trim(),
+    date:   new Date().toLocaleDateString('zh-TW'),
+    status: '待處理',
+  };
+  const wishes = JSON.parse(localStorage.getItem('dash_wishes') || '[]');
+  wishes.unshift(wish);
+  localStorage.setItem('dash_wishes', JSON.stringify(wishes));
+  document.getElementById('wish-form').style.display    = 'none';
+  document.getElementById('wish-success').style.display = 'block';
+}
+
+function resetWish() {
+  document.getElementById('w-content').value = '';
+  document.getElementById('w-note').value    = '';
+  document.getElementById('wish-form').style.display    = 'block';
+  document.getElementById('wish-success').style.display = 'none';
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async function() {
+  const { createClient } = window.supabase;
+  const db = createClient(
+    'https://ebxixctntvpfzhgvbvbn.supabase.co',
+    'sb_publishable_ra5tuKIAAStLvHZE-7dZLQ_XuXobLVm'
+  );
+  const { data: { session } } = await db.auth.getSession();
+  const btn = document.querySelector('.nav-login');
+  if (!btn) return;
+  if (session) {
+    const name = session.user.user_metadata?.display_name
+              || session.user.user_metadata?.username
+              || session.user.email.split('@')[0];
+    btn.href = 'profile.html';
+    const _av = JSON.parse(localStorage.getItem('dash_user_' + session.user.id) || '{}');
+    btn.innerHTML = _av.avatar
+      ? `<img src="${_av.avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.6)"><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`;
+  }
+})();
+</script>
+</body>
+</html>  .hero-small { padding: 60px 40px 40px; border-bottom: 1px solid var(--border); }
+  .hero-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; font-weight: 500; }
+  .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(40px, 6vw, 72px); line-height: 1; letter-spacing: 0.02em; }
+  .hero-title span { color: var(--blue); }
+
+  .filters { padding: 24px 40px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+  .filter-btn { padding: 7px 16px; border: 1.5px solid var(--border); border-radius: 20px; background: white; font-size: 13px; cursor: pointer; transition: all 0.2s; font-family: 'Noto Sans TC', sans-serif; color: var(--muted); }
+  .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .filter-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+  .picks-wrap { padding: 40px; }
+  .picks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+
+  .pick-card { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; transition: all 0.25s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+  .pick-body { display: flex; flex-direction: column; flex: 1; }
+  .pick-desc { flex: 1; }
+  .pick-card:hover { border-color: var(--blue); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,76,129,0.1); }
+  .pick-img { aspect-ratio: 4/3; background: #f0f4f8; display: flex; align-items: center; justify-content: center; font-size: 12px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif; overflow: hidden; }
+  .pick-img img { width: 100%; height: 100%; object-fit: cover; }
+  .pick-body { padding: 20px; }
+  .pick-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .pick-platform { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: white; background: var(--blue); padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+  .pick-date { font-size: 11px; color: var(--muted); }
+  .pick-name { font-size: 15px; font-weight: 500; line-height: 1.5; margin-bottom: 10px; }
+  .pick-desc { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 16px; }
+  .pick-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--blue); letter-spacing: 0.08em; font-weight: 500; text-transform: uppercase; }
+  .pick-link svg { width: 14px; height: 14px; }
 
   .pin-badge { background: #f39c12; color: white; font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 500; letter-spacing: 0.05em; }
 
