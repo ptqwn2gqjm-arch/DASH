@@ -352,23 +352,23 @@ async function toggleBookmark() {
 }
 
 // ── COMMENTS ──
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVieGl4Y3RudHZwZnpoZ3ZidmJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTMyNzcsImV4cCI6MjA5MDQyOTI3N30.XdqYpqluXr1FMPJdjzD6BQoBMi700j1s-GQpK88xLSU';
+const SB_HEADERS = { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY, 'Content-Type': 'application/json' };
+const SB_URL = 'https://ebxixctntvpfzhgvbvbn.supabase.co/rest/v1';
+
 async function renderComments() {
   const list  = document.getElementById('comment-list');
   const count = document.getElementById('comment-count');
   list.innerHTML = '<div class="no-comments">載入中⋯</div>';
 
-  const { data, error } = await db
-    .from('comments')
-    .select('*')
-    .eq('article_id', articleId)
-    .order('created_at', { ascending: false });
+  const res  = await fetch(`${SB_URL}/comments?select=*&article_id=eq.${articleId}&order=created_at.desc`, { headers: SB_HEADERS });
+  const data = await res.json();
 
-  if (error || !data || !data.length) {
+  if (!data || !data.length) {
     count.textContent = '';
     list.innerHTML = '<div class="no-comments">還沒有留言，來說說你的看法！</div>';
     return;
   }
-
   count.textContent = `(${data.length})`;
   list.innerHTML = data.map(c => `
     <div class="comment">
@@ -386,15 +386,18 @@ async function submitComment() {
   if (!name) { alert('請填寫名字。'); return; }
   if (!text) { alert('請填寫留言內容。'); return; }
 
-  const { error } = await db.from('comments').insert({
-    article_id: articleId,
-    user_id: currentUser?.id || null,
-    name,
-    text,
-    date: new Date().toLocaleDateString('zh-TW'),
+  const res = await fetch(`${SB_URL}/comments`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
+    body: JSON.stringify({
+      article_id: articleId,
+      user_id: currentUser?.id || null,
+      name, text,
+      date: new Date().toLocaleDateString('zh-TW'),
+    })
   });
 
-  if (error) { alert('留言失敗，請再試一次。'); return; }
+  if (!res.ok) { alert('留言失敗，請再試一次。'); return; }
   textInput.value = '';
   if (!currentUser) nameInput.value = '';
   renderComments();
