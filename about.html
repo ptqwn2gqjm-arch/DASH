@@ -225,7 +225,7 @@ try {
   const { createClient } = window.supabase;
   const db = createClient(
     'https://ebxixctntvpfzhgvbvbn.supabase.co',
-    'sb_publishable_ra5tuKIAAStLvHZE-7dZLQ_XuXobLVm'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVieGl4Y3RudHZwZnpoZ3ZidmJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTMyNzcsImV4cCI6MjA5MDQyOTI3N30.XdqYpqluXr1FMPJdjzD6BQoBMi700j1s-GQpK88xLSU'
   );
   const { data: { session } } = await db.auth.getSession();
   const btn = document.querySelector('.nav-login');
