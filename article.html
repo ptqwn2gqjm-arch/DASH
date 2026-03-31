@@ -236,7 +236,10 @@ let currentUser = null;
     const btn = document.querySelector('.nav-login');
     if (btn) {
       btn.href = 'profile.html';
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`;
+      const _av = JSON.parse(localStorage.getItem('dash_user_' + session.user.id) || '{}');
+      btn.innerHTML = _av.avatar
+        ? `<img src="${_av.avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.6)"><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`;
     }
 
     // Auto-fill comment name
