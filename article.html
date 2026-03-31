@@ -12,12 +12,12 @@
 <meta property="og:image" content="">
 <meta name="twitter:card" content="summary_large_image">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root { --blue: #0F4C81; --blue-light: #1a6bb5; --text: #111; --muted: #888; --border: #e8e8e8; --bg: #f5f7fa; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); background: #fff; }
 
-  /* NAV */
   nav { position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; gap: 16px; z-index: 100; }
   .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: 0.08em; text-decoration: none; flex-shrink: 0; }
   .nav-logo .da { color: var(--blue); }
@@ -40,26 +40,20 @@
   .back-btn:hover { border-color: var(--blue); background: #f0f5ff; }
   .back-btn svg { width: 14px; height: 14px; }
 
-  /* ARTICLE */
   .article-wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 80px; }
-
   .article-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
   .platform { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: white; background: var(--blue); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
   .date { font-size: 12px; color: var(--muted); }
-
   .article-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 54px); line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 20px; }
   .article-desc { font-size: 17px; color: var(--muted); line-height: 1.75; font-weight: 300; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
   .article-cover { width: 100%; aspect-ratio: 16/9; background: #f0f4f8; border-radius: 12px; margin-bottom: 36px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; }
   .article-cover img { width: 100%; height: 100%; object-fit: cover; }
   .article-body { font-size: 16px; line-height: 2; color: #333; font-weight: 300; margin-bottom: 48px; }
   .article-body p { margin-bottom: 20px; }
-
-  /* CTA */
   .article-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--blue); color: white; padding: 14px 28px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.1em; text-decoration: none; transition: all 0.2s; margin-bottom: 48px; }
   .article-cta:hover { background: var(--blue-light); transform: translateY(-2px); }
   .article-cta svg { width: 16px; height: 16px; }
 
-  /* SHARE */
   .share-bar { display: flex; align-items: center; gap: 10px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 48px; }
   .share-label { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-right: 4px; }
   .share-btn { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 12px; cursor: pointer; transition: all 0.2s; background: white; font-family: 'Noto Sans TC', sans-serif; text-decoration: none; color: var(--text); }
@@ -71,7 +65,6 @@
   .copy-success { font-size: 11px; color: var(--blue); margin-left: 4px; opacity: 0; transition: opacity 0.3s; }
   .copy-success.show { opacity: 1; }
 
-  /* RELATED */
   .related { margin-bottom: 60px; }
   .related-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: 0.04em; margin-bottom: 20px; }
   .related-title span { color: var(--blue); }
@@ -84,7 +77,6 @@
   .related-platform { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: white; background: var(--blue); padding: 2px 6px; border-radius: 10px; font-weight: 500; display: inline-block; margin-bottom: 5px; }
   .related-name { font-size: 13px; font-weight: 500; line-height: 1.4; }
 
-  /* COMMENTS */
   .comments { border-top: 1px solid var(--border); padding-top: 48px; }
   .comments-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: 0.04em; margin-bottom: 28px; }
   .comments-title span { color: var(--blue); }
@@ -105,7 +97,6 @@
   .comment-reply-text { font-size: 13px; color: var(--blue); line-height: 1.6; }
   .no-comments { font-size: 14px; color: var(--muted); text-align: center; padding: 32px 0; }
 
-  /* FOOTER */
   footer { background: var(--bg); border-top: 1px solid var(--border); padding: 32px 40px; }
   .footer-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
   .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 0.08em; text-decoration: none; }
@@ -113,13 +104,11 @@
   .footer-logo .sh { color: var(--text); }
   .footer-copy { font-size: 12px; color: var(--muted); }
 
-  /* LOADING */
   #loading { text-align: center; padding: 100px 24px; color: var(--muted); font-size: 14px; }
   #error-msg { text-align: center; padding: 100px 24px; }
   #error-msg h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 12px; }
   #error-msg a { color: var(--blue); font-size: 14px; }
 
-  /* MOBILE */
   @media (max-width: 768px) {
     nav { padding: 0 16px; gap: 8px; }
     .nav-search { max-width: 160px; }
@@ -183,7 +172,6 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
 
-    <!-- SHARE -->
     <div class="share-bar">
       <span class="share-label">分享</span>
       <a class="share-btn line" id="share-line" href="#" target="_blank" rel="noopener">
@@ -197,13 +185,11 @@
       <span class="copy-success" id="copy-ok">✓ 已複製</span>
     </div>
 
-    <!-- RELATED -->
     <div class="related" id="related-section">
       <div class="related-title">更多<span>選物</span></div>
       <div class="related-grid" id="related-grid"></div>
     </div>
 
-    <!-- COMMENTS -->
     <div class="comments">
       <div class="comments-title">留言 <span id="comment-count"></span></div>
       <div class="comment-form">
@@ -226,20 +212,57 @@
 </footer>
 
 <script>
+// ── SUPABASE ──
+const { createClient } = window.supabase;
+const db = createClient(
+  'https://ebxixctntvpfzhgvbvbn.supabase.co',
+  'sb_publishable_ra5tuKIAAStLvHZE-7dZLQ_XuXobLVm'
+);
+
 const params    = new URLSearchParams(location.search);
 const articleId = params.get('id');
+let currentUser = null;
+
+// ── INIT ──
+(async function() {
+  const { data: { session } } = await db.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    const name = session.user.user_metadata?.display_name
+              || session.user.user_metadata?.username
+              || session.user.email.split('@')[0];
+
+    // Nav button
+    const btn = document.querySelector('.nav-login');
+    if (btn) {
+      btn.href = 'profile.html';
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">${name}</span>`;
+    }
+
+    // Auto-fill comment name
+    const nameInput = document.getElementById('c-name');
+    if (nameInput) {
+      nameInput.value = name;
+      nameInput.readOnly = true;
+      nameInput.style.background = 'var(--bg)';
+      nameInput.style.color = 'var(--muted)';
+    }
+  }
+
+  // Load article
+  loadArticle();
+})();
 
 // ── LOAD ARTICLE ──
-(function() {
+function loadArticle() {
   if (!articleId) { showError(); return; }
   try {
     const articles = JSON.parse(localStorage.getItem('dash_articles') || '[]');
     const a = articles.find(x => x.id === articleId);
     if (!a) { showError(); return; }
 
-    // Update SEO
     document.title = `Dash — ${a.title}`;
-    document.querySelector('meta[property="og:title"]').content     = `Dash — ${a.title}`;
+    document.querySelector('meta[property="og:title"]').content      = `Dash — ${a.title}`;
     document.querySelector('meta[property="og:description"]').content = a.desc;
     if (a.cover) document.querySelector('meta[property="og:image"]').content = a.cover;
 
@@ -256,20 +279,18 @@ const articleId = params.get('id');
     if (a.cover) cover.innerHTML = `<img src="${a.cover}" alt="${a.title}">`;
     else cover.textContent = '商品圖片';
 
-    // Share LINE
     document.getElementById('share-line').href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}`;
-
-    document.getElementById('loading').style.display       = 'none';
+    document.getElementById('loading').style.display        = 'none';
     document.getElementById('article-content').style.display = 'block';
 
     updateBookmarkBtn(articleId);
     renderRelated(articles, articleId, a.platform);
     renderComments();
   } catch(e) { showError(); }
-})();
+}
 
 function showError() {
-  document.getElementById('loading').style.display  = 'none';
+  document.getElementById('loading').style.display   = 'none';
   document.getElementById('error-msg').style.display = 'block';
 }
 
@@ -303,19 +324,22 @@ function copyLink() {
 // ── BOOKMARK ──
 function updateBookmarkBtn(id) {
   const bookmarks = JSON.parse(localStorage.getItem('dash_bookmarks') || '[]');
-  const saved  = bookmarks.includes(id);
-  const btn    = document.getElementById('bookmark-btn');
-  const icon   = document.getElementById('bookmark-icon');
-  const label  = document.getElementById('bookmark-label');
+  const saved = bookmarks.includes(id);
+  const btn   = document.getElementById('bookmark-btn');
+  const icon  = document.getElementById('bookmark-icon');
+  const label = document.getElementById('bookmark-label');
   btn.style.borderColor = saved ? 'var(--blue)' : 'var(--border)';
   btn.style.color       = saved ? 'var(--blue)' : 'var(--muted)';
   icon.setAttribute('fill', saved ? '#0F4C81' : 'none');
   label.textContent = saved ? '已收藏' : '收藏';
 }
 
-function toggleBookmark() {
-  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
-  if (!session) { if (confirm('請先登入才能收藏，前往登入頁面？')) window.location.href = 'login.html'; return; }
+async function toggleBookmark() {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) {
+    if (confirm('請先登入才能收藏，前往登入頁面？')) window.location.href = 'login.html';
+    return;
+  }
   if (!articleId) return;
   const bookmarks = JSON.parse(localStorage.getItem('dash_bookmarks') || '[]');
   const idx = bookmarks.indexOf(articleId);
@@ -343,38 +367,19 @@ function renderComments() {
 }
 
 function submitComment() {
-  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
   const nameInput = document.getElementById('c-name');
   const textInput = document.getElementById('c-text');
-  const name = session ? session.name : nameInput.value.trim();
+  const name = nameInput.value.trim();
   const text = textInput.value.trim();
   if (!name) { alert('請填寫名字。'); return; }
   if (!text) { alert('請填寫留言內容。'); return; }
   const comments = getComments();
   comments.unshift({ name, text, date: new Date().toLocaleDateString('zh-TW') });
   saveComments(comments);
-  nameInput.value = ''; textInput.value = '';
+  textInput.value = '';
+  if (!currentUser) nameInput.value = '';
   renderComments();
 }
-
-// Auto-fill name if logged in
-(function() {
-  const session = JSON.parse(localStorage.getItem('dash_session') || 'null');
-  if (session) {
-    const nameInput = document.getElementById('c-name');
-    nameInput.value    = session.name;
-    nameInput.readOnly = true;
-    nameInput.style.background = 'var(--bg)';
-    nameInput.style.color      = 'var(--muted)';
-  }
-
-  // Update nav
-  const loginBtn = document.querySelector('.nav-login');
-  if (loginBtn && session) {
-    loginBtn.href = 'profile.html';
-    loginBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" style="width:18px;height:18px;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-size:10px;letter-spacing:0.05em">我的</span>';
-  }
-})();
 </script>
 </body>
 </html>
