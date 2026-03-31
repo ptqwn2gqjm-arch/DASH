@@ -361,7 +361,7 @@ async function renderComments() {
   const count = document.getElementById('comment-count');
   list.innerHTML = '<div class="no-comments">載入中⋯</div>';
 
-  const res  = await fetch(`${SB_URL}/comments?select=*&article_id=eq.${articleId}&order=created_at.desc`, { headers: SB_HEADERS });
+  const res  = await fetch(`${SB_URL}/comments?select=*&article_id=eq.${articleId}&order=id.desc`, { headers: SB_HEADERS });
   const data = await res.json();
 
   if (!data || !data.length) {
